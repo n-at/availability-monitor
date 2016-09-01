@@ -5,14 +5,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import ru.doublebyte.availabilitymonitor.managers.MonitoringManager;
 import ru.doublebyte.availabilitymonitor.types.Monitoring;
 
+import javax.websocket.server.PathParam;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringJoiner;
@@ -69,6 +67,19 @@ public class IndexController {
         redirectAttributes.addFlashAttribute("error_message", error);
         redirectAttributes.addFlashAttribute("monitoring", monitoring);
         return "redirect:/add";
+    }
+
+    @RequestMapping(value = "/delete/{id}", method = RequestMethod.GET)
+    public String delete(
+            @PathVariable("id") Long id,
+            RedirectAttributes redirectAttributes
+    ) {
+        if (monitoringManager.delete(id)) {
+            redirectAttributes.addFlashAttribute("success_message", "Monitoring deleted");
+        } else {
+            redirectAttributes.addFlashAttribute("error_message", "An error occurred while deleting monitoring");
+        }
+        return "redirect:/";
     }
 
 }

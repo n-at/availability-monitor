@@ -13,6 +13,14 @@
         </div>
     </div>
 
+    {% if not error_message is empty %}
+        <div class="alert alert-warning">{{ error_message }}</div>
+    {% endif %}
+
+    {% if not success_message is empty %}
+        <div class="alert alert-success">{{ success_message }}</div>
+    {% endif %}
+
     <ul class="list-group">
         {% for monitoring in monitorings %}
             <li class="list-group-item">

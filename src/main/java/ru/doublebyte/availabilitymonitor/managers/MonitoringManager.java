@@ -53,6 +53,24 @@ public class MonitoringManager {
     }
 
     /**
+     * Delete monitoring
+     * @param id Monitoring identifier
+     * @return Status of operation
+     */
+    public boolean delete(Long id) {
+        try {
+            monitoringRepository.delete(id);
+        } catch (Exception e) {
+            logger.error("An error occurred while deleting monitoring", e);
+            return false;
+        }
+
+        //TODO remove from scheduler
+
+        return true;
+    }
+
+    /**
      * Check monitoring for validity
      * @param monitoring Monitoring to check
      * @return Check errors
