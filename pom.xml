@@ -34,6 +34,16 @@
             <artifactId>pebble-spring-boot-starter</artifactId>
             <version>${pebble.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.webjars.bower</groupId>
+            <artifactId>bootstrap</artifactId>
+            <version>3.3.7</version>
+        </dependency>
+        <dependency>
+            <groupId>org.webjars.bower</groupId>
+            <artifactId>geopattern</artifactId>
+            <version>1.2.3</version>
+        </dependency>
 
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
@@ -44,11 +54,10 @@
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
         </dependency>
-        <dependency>
-            <groupId>org.flywaydb</groupId>
-            <artifactId>flyway-core</artifactId>
-        </dependency>
-
+        <!--<dependency>-->
+            <!--<groupId>org.flywaydb</groupId>-->
+            <!--<artifactId>flyway-core</artifactId>-->
+        <!--</dependency>-->
 
     </dependencies>
 

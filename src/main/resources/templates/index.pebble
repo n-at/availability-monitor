@@ -1,0 +1,23 @@
+{% extends "layout/default" %}
+
+{% block title %}
+    monitoring list
+{% endblock %}
+
+{% block content %}
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <a href="/add" class="btn btn-success">
+                <i class="glyphicon glyphicon-plus"></i> Add
+            </a>
+        </div>
+    </div>
+
+    <ul class="list-group">
+        {% for monitoring in monitorings %}
+            <li class="list-group-item">
+                {# TODO #}
+            </li>
+        {% endfor %}
+    </ul>
+{% endblock %}

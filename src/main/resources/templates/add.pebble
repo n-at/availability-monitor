@@ -1,0 +1,10 @@
+{% extends "layout/default" %}
+
+{% block title %}
+    add new monitoring
+{% endblock %}
+
+{% block content %}
+    ADD
+    {# TODO #}
+{% endblock %}

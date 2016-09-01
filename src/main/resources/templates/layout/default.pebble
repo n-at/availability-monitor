@@ -1,0 +1,28 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="UTF-8">
+
+    <link rel="stylesheet" href="/webjars/bootstrap/3.3.7/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/background.css">
+
+    <script src="/webjars/jquery/3.1.0/dist/jquery.min.js"></script>
+    <script src="/webjars/geopattern/1.2.3/js/geopattern.min.js"></script>
+    <script src="/js/backgrund.js"></script>
+
+    <title>availability-monitor</title>
+</head>
+<body>
+<div class="container">
+    <div class="page-header">
+        <h2>
+            availability-monitor
+            <small>{% block title %}{% endblock %}</small>
+        </h2>
+    </div>
+
+    {% block content %}{% endblock %}
+
+</div>
+</body>
+</html>
