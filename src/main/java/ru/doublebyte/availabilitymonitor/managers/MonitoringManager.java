@@ -30,7 +30,7 @@ public class MonitoringManager {
      * @return Monitoring list
      */
     public List<Monitoring> getAll() {
-        return monitoringRepository.findAllByOrderByUrl();
+        return monitoringRepository.findAllByOrderByName();
     }
 
     /**
@@ -59,6 +59,10 @@ public class MonitoringManager {
      */
     public List<String> validate(Monitoring monitoring) {
         List<String> errors = new ArrayList<>();
+
+        if (monitoring.getName() == null || monitoring.getName().isEmpty()) {
+            errors.add("Name should not be empty");
+        }
 
         if (monitoring.getUrl() == null || monitoring.getUrl().isEmpty()) {
             errors.add("Url should not be empty");

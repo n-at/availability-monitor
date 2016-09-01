@@ -16,6 +16,7 @@
     <ul class="list-group">
         {% for monitoring in monitorings %}
             <li class="list-group-item">
+                <span class="monitoring-name">{{ monitoring.name }}</span>
                 <span class="monitoring-url">{{ monitoring.url }}</span>
 
                 <div class="pull-right">

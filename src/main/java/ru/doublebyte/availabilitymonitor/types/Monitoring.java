@@ -14,11 +14,17 @@ public class Monitoring {
     @Column(name = "url", nullable = false, length = 250)
     private String url;
 
+    @Column(name = "name", nullable = false, length = 250)
+    private String name;
+
+    @Column(name = "active")
+    private Boolean active;
+
     @Column(name = "check_interval", nullable = false)
-    private int checkInterval;
+    private Integer checkInterval;
 
     @Column(name = "respond_interval", nullable = false)
-    private int respondInterval;
+    private Integer respondInterval;
 
     ///////////////////////////////////////////////////////////////////////////
 
@@ -26,20 +32,16 @@ public class Monitoring {
 
     }
 
-    public Monitoring(String url, int checkInterval, int respondInterval) {
+    public Monitoring(String url, String name, int checkInterval, int respondInterval) {
         this.url = url;
+        this.name = name;
         this.checkInterval = checkInterval;
         this.respondInterval = respondInterval;
     }
 
     @Override
     public String toString() {
-        return "Monitoring{" +
-                "id=" + id +
-                ", url='" + url + '\'' +
-                ", checkInterval=" + checkInterval +
-                ", respondInterval=" + respondInterval +
-                '}';
+        return String.format("Monitoring{id=%d, url='%s', name='%s'}", id, url, name);
     }
 
     ///////////////////////////////////////////////////////////////////////////
@@ -52,11 +54,23 @@ public class Monitoring {
         return url;
     }
 
-    public int getCheckInterval() {
+    public Integer getCheckInterval() {
         return checkInterval;
     }
 
-    public int getRespondInterval() {
+    public Integer getRespondInterval() {
         return respondInterval;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public Boolean isActive() {
+        return active;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
     }
 }

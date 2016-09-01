@@ -48,12 +48,13 @@ public class IndexController {
 
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     public String add(
+            @RequestParam(name = "name") String name,
             @RequestParam(name = "url") String url,
             @RequestParam(name = "check-interval") int checkInterval,
             @RequestParam(name = "respond-interval") int respondInterval,
             RedirectAttributes redirectAttributes
     ) {
-        Monitoring monitoring = new Monitoring(url, checkInterval, respondInterval);
+        Monitoring monitoring = new Monitoring(url, name, checkInterval, respondInterval);
         List<String> errors = monitoringManager.validate(monitoring);
 
         if (errors.isEmpty()) {

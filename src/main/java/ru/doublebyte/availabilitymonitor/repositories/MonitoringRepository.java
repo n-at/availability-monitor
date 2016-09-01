@@ -7,6 +7,6 @@ import java.util.List;
 
 public interface MonitoringRepository extends CrudRepository<Monitoring, Long> {
 
-    List<Monitoring> findAllByOrderByUrl();
+    List<Monitoring> findAllByOrderByName();
 
 }
