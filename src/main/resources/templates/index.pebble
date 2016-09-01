@@ -16,7 +16,18 @@
     <ul class="list-group">
         {% for monitoring in monitorings %}
             <li class="list-group-item">
-                {# TODO #}
+                <span class="monitoring-url">{{ monitoring.url }}</span>
+
+                <div class="pull-right">
+                    <a href="/edit/{{ monitoring.id }}" class="monitoring-edit">
+                        <i class="glyphicon glyphicon-edit"></i> Edit
+                    </a>
+                    <a href="/delete/{{ monitoring.id }}" class="monitoring-delete">
+                        <i class="glyphicon glyphicon-remove"></i> Delete
+                    </a>
+                </div>
+
+                <div class="clearfix"></div>
             </li>
         {% endfor %}
     </ul>
