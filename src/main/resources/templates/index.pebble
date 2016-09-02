@@ -24,19 +24,41 @@
     <ul class="list-group">
         {% for monitoring in monitorings %}
             <li class="list-group-item">
-                <span class="monitoring-name lead">{{ monitoring.name }}</span>
-                <span class="monitoring-url text-info">{{ monitoring.url }}</span>
+                <div class="row">
+                    <div class="col-md-3 col-xs-3">
+                        <span class="monitoring-name lead">{{ monitoring.name }}</span>
+                    </div>
 
-                <div class="pull-right">
-                    <a href="/edit/{{ monitoring.id }}" class="monitoring-edit">
-                        <i class="glyphicon glyphicon-edit"></i> Edit
-                    </a>
-                    <a href="/delete/{{ monitoring.id }}" class="monitoring-delete text-danger">
-                        <i class="glyphicon glyphicon-remove"></i> Delete
-                    </a>
+                    <div class="col-md-2 col-xs-3">
+                        <span class="monitoring-url text-info">{{ monitoring.url }}</span>
+                    </div>
+
+                    <div class="col-md-1 col-xs-2">
+                        <span class="monitoring-active">
+                        {% if monitoring.active %}
+                            <a href="/active/{{ monitoring.id }}" class="text-success">ACTIVE</a>
+                        {% else %}
+                            <a href="/active/{{ monitoring.id }}" class="text-danger">INACTIVE</a>
+                        {% endif %}
+                        </span>
+                    </div>
+
+                    <div class="col-md-1 col-xs-2">
+                        <span class="monitoring-status">
+                            {# TODO #}
+                            ONLINE
+                        </span>
+                    </div>
+
+                    <div class="col-md-3 col-md-offset-2 col-xs-2">
+                        <a href="/edit/{{ monitoring.id }}" class="btn btn-link monitoring-edit">
+                            <span class="glyphicon glyphicon-edit"></span> Edit
+                        </a>
+                        <a href="/delete/{{ monitoring.id }}" class="btn btn-link monitoring-delete">
+                            <span class="glyphicon glyphicon-remove"></span> Delete
+                        </a>
+                    </div>
                 </div>
-
-                <div class="clearfix"></div>
             </li>
         {% endfor %}
     </ul>

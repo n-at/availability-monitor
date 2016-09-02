@@ -1,7 +1,5 @@
 package ru.doublebyte.availabilitymonitor;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,8 +14,6 @@ import java.util.stream.Collectors;
 @Controller
 @RequestMapping("/")
 public class IndexController {
-
-    private static final Logger logger = LoggerFactory.getLogger(IndexController.class);
 
     private final MonitoringManager monitoringManager;
 
@@ -37,7 +33,7 @@ public class IndexController {
     }
 
     @RequestMapping(value = "/add", method = RequestMethod.GET)
-    public String addForm(Model model) {
+    public String addForm() {
         return "add";
     }
 
@@ -50,8 +46,9 @@ public class IndexController {
             Model model
     ) {
         Monitoring monitoring = new Monitoring(url, name, checkInterval, respondInterval);
-        List<String> errors = monitoringManager.validate(monitoring);
+        monitoring.setActive(true);
 
+        List<String> errors = monitoringManager.validate(monitoring);
         if (errors.isEmpty()) {
             if (monitoringManager.add(monitoring)) {
                 return "redirect:/";
@@ -120,6 +117,26 @@ public class IndexController {
         model.addAttribute("error_message", error);
         model.addAttribute("monitoring", monitoring);
         return "edit";
+    }
+
+    @RequestMapping(value = "/active/{id}", method = RequestMethod.GET)
+    public String active(
+            @PathVariable("id") Long id,
+            RedirectAttributes redirectAttributes
+    ) {
+        Monitoring monitoring = monitoringManager.get(id);
+        if (monitoring == null) {
+            redirectAttributes.addFlashAttribute("error_message",
+                    String.format("Monitoring with id %d not found", id));
+            return "redirect:/";
+        }
+
+        monitoring.setActive(monitoring.isActive() == null || !monitoring.isActive());
+        if (!monitoringManager.update(monitoring)) {
+            redirectAttributes.addFlashAttribute("error_message", "An error occurred while changing activity status");
+        }
+
+        return "redirect:/";
     }
 
     @RequestMapping(value = "/delete/{id}", method = RequestMethod.GET)
