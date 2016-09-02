@@ -2,6 +2,7 @@ package ru.doublebyte.availabilitymonitor.managers;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.InitializingBean;
 import ru.doublebyte.availabilitymonitor.repositories.MonitoringRepository;
 import ru.doublebyte.availabilitymonitor.types.Monitoring;
 
@@ -11,16 +12,21 @@ import java.util.List;
 /**
  * Manage monitoring instances
  */
-public class MonitoringManager {
+public class MonitoringManager implements InitializingBean {
 
     private static final Logger logger = LoggerFactory.getLogger(MonitoringManager.class);
 
     private MonitoringRepository monitoringRepository;
+    private SchedulerManager schedulerManager;
 
     ///////////////////////////////////////////////////////////////////////////
 
-    public MonitoringManager(MonitoringRepository monitoringRepository) {
+    public MonitoringManager(
+            MonitoringRepository monitoringRepository,
+            SchedulerManager schedulerManager
+    ) {
         this.monitoringRepository = monitoringRepository;
+        this.schedulerManager = schedulerManager;
     }
 
     ///////////////////////////////////////////////////////////////////////////
@@ -61,7 +67,7 @@ public class MonitoringManager {
             return false;
         }
 
-        //TODO add to scheduler
+        schedulerManager.addMonitoring(monitoring);
 
         return true;
     }
@@ -79,7 +85,7 @@ public class MonitoringManager {
             logger.error("An error occurred while updating monitoring with id {}" + monitoring.getId(), e);
         }
 
-        //TODO update on scheduler
+        schedulerManager.updateMonitoring(monitoring);
 
         return true;
     }
@@ -90,14 +96,19 @@ public class MonitoringManager {
      * @return Status of operation
      */
     public boolean delete(Long id) {
+        Monitoring monitoring = get(id);
+        if (monitoring == null) {
+            return true;
+        }
+
         try {
-            monitoringRepository.delete(id);
+            monitoringRepository.delete(monitoring);
         } catch (Exception e) {
             logger.error("An error occurred while deleting monitoring", e);
             return false;
         }
 
-        //TODO remove from scheduler
+        schedulerManager.deleteMonitoring(monitoring);
 
         return true;
     }
@@ -127,6 +138,17 @@ public class MonitoringManager {
         }
 
         return errors;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////
+
+    /**
+     * Add all monitorings to scheduler on startup
+     * @throws Exception
+     */
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        getAll().forEach(it -> schedulerManager.addMonitoring(it));
     }
 
 }
