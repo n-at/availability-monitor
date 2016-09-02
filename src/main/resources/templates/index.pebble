@@ -46,7 +46,6 @@
                     <div class="col-md-1 col-xs-2">
                         <span class="monitoring-status">
                             {# TODO #}
-                            ONLINE
                         </span>
                     </div>
 

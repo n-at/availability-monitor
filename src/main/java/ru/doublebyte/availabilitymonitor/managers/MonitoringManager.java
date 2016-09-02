@@ -74,7 +74,7 @@ public class MonitoringManager {
     public boolean update(Monitoring monitoring) {
         try {
             monitoringRepository.save(monitoring);
-            logger.info("Monitoring with {} updated", monitoring.getId());
+            logger.info("Monitoring with id {} updated", monitoring.getId());
         } catch (Exception e) {
             logger.error("An error occurred while updating monitoring with id {}" + monitoring.getId(), e);
         }
