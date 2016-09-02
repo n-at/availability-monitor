@@ -1,0 +1,41 @@
+<div class="form-group">
+    <label class="control-label" for="name">Name</label>
+    <input type="text"
+           name="name"
+           id="name"
+           class="form-control"
+           placeholder="Monitoring name"
+           required
+           value="{{ monitoring.name }}">
+</div>
+
+<div class="form-group">
+    <label class="control-label" for="url">URL</label>
+    <input type="text"
+           name="url"
+           id="url"
+           class="form-control"
+           placeholder="Site URL to check"
+           required
+           value="{{ monitoring.url }}">
+</div>
+
+<div class="form-group">
+    <label class="control-label" for="check-interval">Check interval (seconds)</label>
+    <input type="text"
+           name="check-interval"
+           id="check-interval"
+           class="form-control"
+           required
+           value="{{ monitoring.checkInterval is empty ? 600 : monitoring.checkInterval }}">
+</div>
+
+<div class="form-group">
+    <label class="control-label" for="respond-interval">Response interval (milliseconds)</label>
+    <input type="text"
+           name="respond-interval"
+           id="respond-interval"
+           class="form-control"
+           required
+           value="{{ monitoring.respondInterval is empty ? 5000 : monitoring.respondInterval }}">
+</div>

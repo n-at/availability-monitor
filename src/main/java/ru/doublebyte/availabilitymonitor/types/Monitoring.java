@@ -54,16 +54,32 @@ public class Monitoring {
         return url;
     }
 
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
     public Integer getCheckInterval() {
         return checkInterval;
+    }
+
+    public void setCheckInterval(Integer checkInterval) {
+        this.checkInterval = checkInterval;
     }
 
     public Integer getRespondInterval() {
         return respondInterval;
     }
 
+    public void setRespondInterval(Integer respondInterval) {
+        this.respondInterval = respondInterval;
+    }
+
     public String getName() {
         return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public Boolean isActive() {

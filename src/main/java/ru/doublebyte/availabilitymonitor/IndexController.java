@@ -10,10 +10,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import ru.doublebyte.availabilitymonitor.managers.MonitoringManager;
 import ru.doublebyte.availabilitymonitor.types.Monitoring;
 
-import javax.websocket.server.PathParam;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.StringJoiner;
 import java.util.stream.Collectors;
 
 @Controller
@@ -46,11 +43,11 @@ public class IndexController {
 
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     public String add(
-            @RequestParam(name = "name") String name,
-            @RequestParam(name = "url") String url,
-            @RequestParam(name = "check-interval") int checkInterval,
-            @RequestParam(name = "respond-interval") int respondInterval,
-            RedirectAttributes redirectAttributes
+            @RequestParam("name") String name,
+            @RequestParam("url") String url,
+            @RequestParam("check-interval") int checkInterval,
+            @RequestParam("respond-interval") int respondInterval,
+            Model model
     ) {
         Monitoring monitoring = new Monitoring(url, name, checkInterval, respondInterval);
         List<String> errors = monitoringManager.validate(monitoring);
@@ -64,9 +61,65 @@ public class IndexController {
         }
 
         String error = errors.stream().collect(Collectors.joining(". "));
-        redirectAttributes.addFlashAttribute("error_message", error);
-        redirectAttributes.addFlashAttribute("monitoring", monitoring);
-        return "redirect:/add";
+        model.addAttribute("error_message", error);
+        model.addAttribute("monitoring", monitoring);
+        return "add";
+    }
+
+    @RequestMapping(value = "/edit/{id}", method = RequestMethod.GET)
+    public String editForm(
+            @PathVariable("id") Long id,
+            Model model,
+            RedirectAttributes redirectAttributes
+    ) {
+        Monitoring monitoring = monitoringManager.get(id);
+
+        if (monitoring == null) {
+            redirectAttributes.addFlashAttribute("error_message",
+                    String.format("Monitoring with id %d not found", id));
+            return "redirect:/";
+        }
+
+        model.addAttribute("monitoring", monitoring);
+
+        return "edit";
+    }
+
+    @RequestMapping(value = "/edit/{id}", method = RequestMethod.POST)
+    public String edit(
+            @PathVariable("id") Long id,
+            @RequestParam("name") String name,
+            @RequestParam("url") String url,
+            @RequestParam("check-interval") int checkInterval,
+            @RequestParam("respond-interval") int respondInterval,
+            RedirectAttributes redirectAttributes,
+            Model model
+    ) {
+        Monitoring monitoring = monitoringManager.get(id);
+        if (monitoring == null) {
+            redirectAttributes.addFlashAttribute("error_message",
+                    String.format("Monitoring with id %d not found", id));
+            return "redirect:/";
+        }
+
+        monitoring.setName(name);
+        monitoring.setUrl(url);
+        monitoring.setCheckInterval(checkInterval);
+        monitoring.setRespondInterval(respondInterval);
+
+        List<String> errors = monitoringManager.validate(monitoring);
+        if (errors.isEmpty()) {
+            if (monitoringManager.update(monitoring)) {
+                return "redirect:/";
+            } else {
+                errors.add("An error occurred while saving monitoring");
+            }
+        }
+
+        String error = errors.stream().collect(Collectors.joining(". "));
+        model.addAttribute("error_message", error);
+        model.addAttribute("monitoring", monitoring);
+        return "edit";
     }
 
     @RequestMapping(value = "/delete/{id}", method = RequestMethod.GET)

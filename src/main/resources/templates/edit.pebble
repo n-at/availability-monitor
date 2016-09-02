@@ -1,7 +1,7 @@
 {% extends "layout/default" %}
 
 {% block title %}
-    add new monitoring
+    edit monitoring
 {% endblock %}
 
 {% block content %}
@@ -16,7 +16,7 @@
 
                 {% include "include/monitoring_form_fields" %}
 
-                <button type="submit" class="btn btn-block btn-primary">Add</button>
+                <button type="submit" class="btn btn-block btn-primary">Save</button>
             </form>
 
         </div>

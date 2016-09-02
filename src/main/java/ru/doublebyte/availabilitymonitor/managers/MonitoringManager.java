@@ -34,6 +34,20 @@ public class MonitoringManager {
     }
 
     /**
+     * Get monitoring with id
+     * @param id Monitoring id
+     * @return Monitoring or null
+     */
+    public Monitoring get(Long id) {
+        try {
+            return monitoringRepository.findOne(id);
+        } catch (Exception e) {
+            logger.error("An error occurred while getting monitoring with id " + id, e);
+            return null;
+        }
+    }
+
+    /**
      * Add new monitoring
      * @param monitoring New monitoring
      * @return Status of operation
@@ -48,6 +62,24 @@ public class MonitoringManager {
         }
 
         //TODO add to scheduler
+
+        return true;
+    }
+
+    /**
+     * Update monitoring
+     * @param monitoring Updated monitoring data
+     * @return Status of operation
+     */
+    public boolean update(Monitoring monitoring) {
+        try {
+            monitoringRepository.save(monitoring);
+            logger.info("Monitoring with {} updated", monitoring.getId());
+        } catch (Exception e) {
+            logger.error("An error occurred while updating monitoring with id {}" + monitoring.getId(), e);
+        }
+
+        //TODO update on scheduler
 
         return true;
     }
