@@ -1,0 +1,7 @@
+<a href="/edit/{{ monitoring.id }}" class="btn btn-link monitoring-edit">
+    <i class="glyphicon glyphicon-edit"></i> Edit
+</a>
+
+<a href="/delete/{{ monitoring.id }}" class="btn btn-link monitoring-delete">
+    <i class="glyphicon glyphicon-remove"></i> Delete
+</a>

@@ -13,52 +13,27 @@
         </div>
     </div>
 
-    {% include "include/error_message" %}
-    {% include "include/success_message" %}
+    {% include "include/message/error" %}
+    {% include "include/message/success" %}
 
     <ul class="list-group">
         {% for monitoring in monitorings %}
             <li class="list-group-item">
                 <div class="row">
                     <div class="col-md-3 col-xs-3">
-                        <span class="monitoring-name lead">{{ monitoring.name }}</span>
+                        {% include "include/monitoring_list/name" %}
                     </div>
-
                     <div class="col-md-2 col-xs-3">
-                        <span class="monitoring-url text-info">{{ monitoring.url }}</span>
+                        {% include "include/monitoring_list/url" %}
                     </div>
-
                     <div class="col-md-1 col-xs-2">
-                        <span class="monitoring-active">
-                        {% if monitoring.active %}
-                            <a href="/active/{{ monitoring.id }}" class="text-success">ACTIVE</a>
-                        {% else %}
-                            <a href="/active/{{ monitoring.id }}" class="text-danger">INACTIVE</a>
-                        {% endif %}
-                        </span>
+                        {% include "include/monitoring_list/activity_toggle" %}
                     </div>
-
                     <div class="col-md-1 col-xs-2">
-                        <a class="monitoring-status" href="/status/{{ monitoring.id }}">
-                            {% if not monitoring.latestTestResult is null %}
-                                {% if monitoring.latestTestResult.result.success %}
-                                    <span class="text-success">{{ monitoring.latestTestResult.result }}</span>
-                                {% else %}
-                                    <span class="test-danger">{{ monitoring.latestTestResult.result }}</span>
-                                {% endif %}
-                            {% else %}
-                                <span class="text-info">NOT TESTED</span>
-                            {% endif %}
-                        </a>
+                        {% include "include/monitoring_list/latest_status" %}
                     </div>
-
                     <div class="col-md-3 col-md-offset-2 col-xs-2">
-                        <a href="/edit/{{ monitoring.id }}" class="btn btn-link monitoring-edit">
-                            <span class="glyphicon glyphicon-edit"></span> Edit
-                        </a>
-                        <a href="/delete/{{ monitoring.id }}" class="btn btn-link monitoring-delete">
-                            <span class="glyphicon glyphicon-remove"></span> Delete
-                        </a>
+                        {% include "include/monitoring_list/controls" %}
                     </div>
                 </div>
             </li>

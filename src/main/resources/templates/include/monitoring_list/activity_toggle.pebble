@@ -1,0 +1,7 @@
+<a href="/active/{{ monitoring.id }}" class="monitoring-active">
+    {% if monitoring.active %}
+        <span class="text-success">ACTIVE</span>
+    {% else %}
+        <span class="text-danger">INACTIVE</span>
+    {% endif %}
+</a>
