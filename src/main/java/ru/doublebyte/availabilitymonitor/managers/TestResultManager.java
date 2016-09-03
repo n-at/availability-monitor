@@ -2,8 +2,13 @@ package ru.doublebyte.availabilitymonitor.managers;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import ru.doublebyte.availabilitymonitor.repositories.TestResultRepository;
 import ru.doublebyte.availabilitymonitor.types.TestResult;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class TestResultManager {
 
@@ -46,6 +51,22 @@ public class TestResultManager {
         } catch (Exception e) {
             logger.error("An error occurred while finding latest result for monitoring with id " + monitoringId, e);
             return null;
+        }
+    }
+
+    /**
+     * Get test results for monitoring with given id
+     * @param monitoringId
+     * @param page
+     * @return
+     */
+    public List<TestResult> getForMonitoringByPage(Long monitoringId, int page, int resultsOnPage) {
+        Pageable pageable = new PageRequest(page, resultsOnPage);
+        try {
+            return testResultRepository.findByMonitoringIdOrderByCreatedAtDesc(monitoringId, pageable);
+        } catch (Exception e) {
+            logger.error("An error occurred while requesting test results for monitoring with id " + monitoringId);
+            return new ArrayList<>();
         }
     }
 

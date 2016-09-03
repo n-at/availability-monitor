@@ -17,6 +17,8 @@ import java.util.stream.Collectors;
 @RequestMapping("/")
 public class IndexController {
 
+    private static final int STATUS_PAGE_SIZE = 20;
+
     private final MonitoringManager monitoringManager;
     private final TestResultManager testResultManager;
 
@@ -166,6 +168,49 @@ public class IndexController {
             redirectAttributes.addFlashAttribute("error_message", "An error occurred while deleting monitoring");
         }
         return "redirect:/";
+    }
+
+    @RequestMapping(value = "/status/{id}/{page}", method = RequestMethod.GET)
+    public String status(
+            @PathVariable("id") Long id,
+            @PathVariable("page") int page,
+            Model model,
+            RedirectAttributes redirectAttributes
+    ) {
+        Monitoring monitoring = monitoringManager.get(id);
+        if (monitoring == null) {
+            redirectAttributes.addFlashAttribute("error_message", "");
+            return "redirect:/";
+        }
+
+        if (page <= 0) {
+            page = 1;
+        }
+
+        List<TestResult> testResults =
+                testResultManager.getForMonitoringByPage(id, page - 1 , STATUS_PAGE_SIZE);
+
+        model.addAttribute("monitoring", monitoring);
+        model.addAttribute("test_results", testResults);
+
+        model.addAttribute("current_page", page);
+        if (page > 1) {
+            model.addAttribute("prev_page", page - 1);
+        }
+        if (testResults.size() == STATUS_PAGE_SIZE) {
+            model.addAttribute("next_page", page + 1);
+        }
+
+        return "status";
+    }
+
+    @RequestMapping(value = "/status/{id}", method = RequestMethod.GET)
+    public String status(
+            @PathVariable("id") Long id,
+            Model model,
+            RedirectAttributes redirectAttributes
+    ) {
+        return status(id, 1, model, redirectAttributes);
     }
 
 }

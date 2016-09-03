@@ -1,0 +1,53 @@
+{% extends "layout/default" %}
+
+{% block title %}
+    status history
+{% endblock %}
+
+{% block content %}
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <span class="lead">{{ monitoring.name }}</span>
+            <span class="text-info">{{ monitoring.url }}</span>
+        </div>
+    </div>
+
+    <table class="table table-condensed table-hover">
+        <tr>
+            <th>Date</th>
+            <th>Status</th>
+        </tr>
+        {% for result in test_results %}
+            <tr>
+                <td>
+                    {{ result.createdAtFormatted }}
+                </td>
+                <td>
+                    {% if result.result.success %}
+                        <span class="text-success">{{ result.result }}</span>
+                    {% else %}
+                        <span class="text-danger">{{ result.result }}</span>
+                    {% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+
+    <div class="text-center">
+        {% if not prev_page is null %}
+            <a class="btn btn-default" href="/status/{{ monitoring.id }}/{{ prev_page }}">
+                <i class="glyphicon glyphicon-chevron-left"></i> Previous page
+            </a>
+        {% endif %}
+
+        <a href="/" class="btn btn-default">
+            <i class="glyphicon glyphicon-chevron-up"></i> Home
+        </a>
+
+        {% if not next_page is null %}
+            <a class="btn btn-default" href="/status/{{ monitoring.id }}/{{ next_page }}">
+                <i class="glyphicon glyphicon-chevron-right"></i> Next page
+            </a>
+        {% endif %}
+    </div>
+{% endblock %}

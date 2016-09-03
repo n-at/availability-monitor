@@ -2,10 +2,13 @@ package ru.doublebyte.availabilitymonitor.types;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @Entity
 @Table(name = "test_result")
 public class TestResult {
+
+    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm:ss");
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -71,5 +74,10 @@ public class TestResult {
 
     public void setResult(UrlChecker.Result result) {
         this.result = result;
+    }
+
+    @Transient
+    public String getCreatedAtFormatted() {
+        return createdAt.format(FORMATTER);
     }
 }
