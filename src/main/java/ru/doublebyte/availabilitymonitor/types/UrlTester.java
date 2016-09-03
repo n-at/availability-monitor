@@ -33,7 +33,7 @@ public class UrlTester implements Tester {
 
         UrlChecker.Result result = urlChecker.check();
         TestResult testResult = new TestResult(monitoring.getId(), result);
-        testResultManager.processTestResult(testResult);
+        testResultManager.add(testResult);
     }
 
 }

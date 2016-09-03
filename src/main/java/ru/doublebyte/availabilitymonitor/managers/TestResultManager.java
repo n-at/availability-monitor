@@ -26,41 +26,6 @@ public class TestResultManager {
     ///////////////////////////////////////////////////////////////////////////
 
     /**
-     * Save new test result
-     * @param testResult
-     * @return
-     */
-    public boolean add(TestResult testResult) {
-        try {
-            testResult = testResultRepository.save(testResult);
-            logger.debug("Saved test result with id {} for monitoring {}",
-                    testResult.getId(), testResult.getMonitoringId());
-        } catch (Exception e) {
-            logger.error("An error occurred while saving test result for monitoring with id {}",
-                    testResult.getMonitoringId());
-            return false;
-        }
-        return true;
-    }
-
-    /**
-     * Save test result and send notification (if necessary)
-     * @param testResult
-     * @return
-     */
-    public boolean processTestResult(TestResult testResult) {
-        TestResult latestTestResult = getLatestForMonitoring(testResult.getMonitoringId());
-        UrlChecker.Result latestResult = latestTestResult == null ? null : latestTestResult.getResult();
-        UrlChecker.Result currentResult = testResult.getResult();
-
-        if (currentResult != latestResult) {
-            //TODO schedule notification
-        }
-
-        return add(testResult);
-    }
-
-    /**
      * Get latest test result for monitoring with given id
      * @param monitoringId
      * @return
@@ -88,6 +53,46 @@ public class TestResultManager {
             logger.error("An error occurred while requesting test results for monitoring with id " + monitoringId);
             return new ArrayList<>();
         }
+    }
+
+    /**
+     * Save test result and send notification (if necessary)
+     * @param testResult
+     * @return
+     */
+    public boolean add(TestResult testResult) {
+        TestResult latestTestResult = getLatestForMonitoring(testResult.getMonitoringId());
+
+        try {
+            testResult = testResultRepository.save(testResult);
+            logger.debug("Saved test result with id {} for monitoring {}",
+                    testResult.getId(), testResult.getMonitoringId());
+        } catch (Exception e) {
+            logger.error("An error occurred while saving test result for monitoring with id {}",
+                    testResult.getMonitoringId());
+            return false;
+        }
+
+        checkDifferences(latestTestResult, testResult);
+
+        return true;
+    }
+
+    /**
+     * Process result differences
+     * @param latestTestResult
+     * @param currentTestResult
+     */
+    private void checkDifferences(TestResult latestTestResult, TestResult currentTestResult) {
+        UrlChecker.Result latestResult = latestTestResult == null ? null : latestTestResult.getResult();
+        UrlChecker.Result currentResult = currentTestResult.getResult();
+
+        if (currentResult == latestResult) {
+            return;
+        }
+
+        //TODO schedule notification
+        //TODO save difference
     }
 
 }
