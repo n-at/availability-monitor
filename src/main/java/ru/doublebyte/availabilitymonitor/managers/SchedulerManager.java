@@ -38,7 +38,7 @@ public class SchedulerManager {
         logger.info("Adding monitoring with id {} to scheduler", monitoring.getId());
 
         if (!monitoring.isActive()) {
-            logger.info("Monitoring with id {} is inactive", monitoring.getId());
+            logger.debug("Monitoring with id {} is inactive", monitoring.getId());
             return;
         }
 

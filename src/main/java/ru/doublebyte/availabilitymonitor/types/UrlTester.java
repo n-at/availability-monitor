@@ -32,10 +32,8 @@ public class UrlTester implements Tester {
         logger.debug("Testing {}", monitoring);
 
         UrlChecker.Result result = urlChecker.check();
-
         TestResult testResult = new TestResult(monitoring.getId(), result);
-
-        testResultManager.add(testResult);
+        testResultManager.processTestResult(testResult);
     }
 
 }

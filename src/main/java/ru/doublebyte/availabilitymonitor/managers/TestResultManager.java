@@ -6,6 +6,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import ru.doublebyte.availabilitymonitor.repositories.TestResultRepository;
 import ru.doublebyte.availabilitymonitor.types.TestResult;
+import ru.doublebyte.availabilitymonitor.types.UrlChecker;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,6 +25,11 @@ public class TestResultManager {
 
     ///////////////////////////////////////////////////////////////////////////
 
+    /**
+     * Save new test result
+     * @param testResult
+     * @return
+     */
     public boolean add(TestResult testResult) {
         try {
             testResult = testResultRepository.save(testResult);
@@ -34,10 +40,24 @@ public class TestResultManager {
                     testResult.getMonitoringId());
             return false;
         }
-
-        //TODO send notifications
-
         return true;
+    }
+
+    /**
+     * Save test result and send notification (if necessary)
+     * @param testResult
+     * @return
+     */
+    public boolean processTestResult(TestResult testResult) {
+        TestResult latestTestResult = getLatestForMonitoring(testResult.getMonitoringId());
+        UrlChecker.Result latestResult = latestTestResult == null ? null : latestTestResult.getResult();
+        UrlChecker.Result currentResult = testResult.getResult();
+
+        if (currentResult != latestResult) {
+            //TODO schedule notification
+        }
+
+        return add(testResult);
     }
 
     /**
