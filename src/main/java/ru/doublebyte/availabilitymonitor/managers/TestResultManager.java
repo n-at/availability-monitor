@@ -22,7 +22,7 @@ public class TestResultManager {
     public boolean add(TestResult testResult) {
         try {
             testResult = testResultRepository.save(testResult);
-            logger.info("Saved test result with id {} for monitoring {}", //TODO set debug level
+            logger.debug("Saved test result with id {} for monitoring {}",
                     testResult.getId(), testResult.getMonitoringId());
         } catch (Exception e) {
             logger.error("An error occurred while saving test result for monitoring with id {}",

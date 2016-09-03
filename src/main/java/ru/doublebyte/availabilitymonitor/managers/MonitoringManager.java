@@ -46,6 +46,7 @@ public class MonitoringManager implements InitializingBean {
      */
     public Monitoring get(Long id) {
         try {
+            logger.debug("Finding monitoring with id {}", id);
             return monitoringRepository.findOne(id);
         } catch (Exception e) {
             logger.error("An error occurred while getting monitoring with id " + id, e);
@@ -103,6 +104,7 @@ public class MonitoringManager implements InitializingBean {
 
         try {
             monitoringRepository.delete(monitoring);
+            logger.info("Monitoring with id {} removed", monitoring.getId());
         } catch (Exception e) {
             logger.error("An error occurred while deleting monitoring", e);
             return false;

@@ -29,7 +29,10 @@ public class UrlTester implements Tester {
 
     @Override
     public void run() {
+        logger.debug("Testing {}", monitoring);
+
         UrlChecker.Result result = urlChecker.check();
+
         TestResult testResult = new TestResult(monitoring.getId(), result);
         testResultManager.add(testResult);
     }
