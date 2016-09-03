@@ -6,9 +6,11 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import ru.doublebyte.availabilitymonitor.managers.MonitoringManager;
+import ru.doublebyte.availabilitymonitor.managers.TestResultDifferenceManager;
 import ru.doublebyte.availabilitymonitor.managers.TestResultManager;
 import ru.doublebyte.availabilitymonitor.types.Monitoring;
 import ru.doublebyte.availabilitymonitor.types.TestResult;
+import ru.doublebyte.availabilitymonitor.types.TestResultDifference;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -21,16 +23,19 @@ public class IndexController {
 
     private final MonitoringManager monitoringManager;
     private final TestResultManager testResultManager;
+    private final TestResultDifferenceManager testResultDifferenceManager;
 
     ///////////////////////////////////////////////////////////////////////////
 
     @Autowired
     public IndexController(
             MonitoringManager monitoringManager,
-            TestResultManager testResultManager
+            TestResultManager testResultManager,
+            TestResultDifferenceManager testResultDifferenceManager
     ) {
         this.monitoringManager = monitoringManager;
         this.testResultManager = testResultManager;
+        this.testResultDifferenceManager = testResultDifferenceManager;
     }
 
     ///////////////////////////////////////////////////////////////////////////
@@ -49,6 +54,8 @@ public class IndexController {
         model.addAttribute("monitorings", monitorings);
         return "index";
     }
+
+    ///////////////////////////////////////////////////////////////////////////
 
     @RequestMapping(value = "/add", method = RequestMethod.GET)
     public String addForm() {
@@ -80,6 +87,8 @@ public class IndexController {
         model.addAttribute("monitoring", monitoring);
         return "add";
     }
+
+    ///////////////////////////////////////////////////////////////////////////
 
     @RequestMapping(value = "/edit/{id}", method = RequestMethod.GET)
     public String editForm(
@@ -137,6 +146,8 @@ public class IndexController {
         return "edit";
     }
 
+    ///////////////////////////////////////////////////////////////////////////
+
     @RequestMapping(value = "/active/{id}", method = RequestMethod.GET)
     public String active(
             @PathVariable("id") Long id,
@@ -157,6 +168,8 @@ public class IndexController {
         return "redirect:/";
     }
 
+    ///////////////////////////////////////////////////////////////////////////
+
     @RequestMapping(value = "/delete/{id}", method = RequestMethod.GET)
     public String delete(
             @PathVariable("id") Long id,
@@ -170,6 +183,8 @@ public class IndexController {
         return "redirect:/";
     }
 
+    ///////////////////////////////////////////////////////////////////////////
+
     @RequestMapping(value = "/status/{id}/{page}", method = RequestMethod.GET)
     public String status(
             @PathVariable("id") Long id,
@@ -179,7 +194,8 @@ public class IndexController {
     ) {
         Monitoring monitoring = monitoringManager.get(id);
         if (monitoring == null) {
-            redirectAttributes.addFlashAttribute("error_message", "");
+            redirectAttributes.addFlashAttribute("error_message",
+                    String.format("Monitoring with id %d not found", id));
             return "redirect:/";
         }
 
@@ -193,13 +209,7 @@ public class IndexController {
         model.addAttribute("monitoring", monitoring);
         model.addAttribute("test_results", testResults);
 
-        model.addAttribute("current_page", page);
-        if (page > 1) {
-            model.addAttribute("prev_page", page - 1);
-        }
-        if (testResults.size() == STATUS_PAGE_SIZE) {
-            model.addAttribute("next_page", page + 1);
-        }
+        addPagesModelVariables(model, page, testResults.size() != STATUS_PAGE_SIZE);
 
         return "status";
     }
@@ -213,4 +223,63 @@ public class IndexController {
         return status(id, 1, model, redirectAttributes);
     }
 
+    ///////////////////////////////////////////////////////////////////////////
+
+    @RequestMapping(value = "/status-history/{id}/{page}")
+    public String statusHistory(
+            @PathVariable("id") Long id,
+            @PathVariable("page") int page,
+            Model model,
+            RedirectAttributes redirectAttributes
+    ) {
+        Monitoring monitoring = monitoringManager.get(id);
+        if (monitoring == null) {
+            redirectAttributes.addFlashAttribute("error_message",
+                    String.format("Monitoring with id %d not found", id));
+            return "redirect:/";
+        }
+
+        if (page <= 0) {
+            page = 1;
+        }
+
+        List<TestResultDifference> differences =
+                testResultDifferenceManager.getForMonitoringByPage(id, page - 1, STATUS_PAGE_SIZE);
+
+        model.addAttribute("monitoring", monitoring);
+        model.addAttribute("differences", differences);
+
+        addPagesModelVariables(model, page, differences.size() != STATUS_PAGE_SIZE);
+
+        return "status_history";
+    }
+
+    @RequestMapping(value = "/status-history/{id}")
+    public String statusHistory(
+            @PathVariable("id") Long id,
+            Model model,
+            RedirectAttributes redirectAttributes
+    ) {
+        return statusHistory(id, 1, model, redirectAttributes);
+    }
+
+    ///////////////////////////////////////////////////////////////////////////
+
+    /**
+     * Add to model attributes with page numbers
+     * @param model
+     * @param currentPage
+     * @param isLast
+     */
+    private void addPagesModelVariables(Model model, int currentPage, boolean isLast) {
+        model.addAttribute("current_page", currentPage);
+
+        if (currentPage > 1) {
+            model.addAttribute("prev_page", currentPage - 1);
+        }
+
+        if (!isLast) {
+            model.addAttribute("next_page", currentPage + 1);
+        }
+    }
 }

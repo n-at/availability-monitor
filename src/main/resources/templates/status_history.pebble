@@ -1,7 +1,7 @@
 {% extends "layout/default" %}
 
 {% block title %}
-    status history
+    status change history
 {% endblock %}
 
 {% block content %}
@@ -10,19 +10,19 @@
     <table class="table table-condensed table-hover">
         <tr>
             <th>Date</th>
-            <th>Status</th>
+            <th>Old status</th>
+            <th>New status</th>
         </tr>
-        {% for result in test_results %}
+        {% for difference in differences %}
             <tr>
                 <td>
-                    {{ result.createdAtFormatted }}
+                    {{ difference.result.createdAtFormatted }}
                 </td>
                 <td>
-                    {% if result.result.success %}
-                        <span class="text-success">{{ result.result }}</span>
-                    {% else %}
-                        <span class="text-danger">{{ result.result }}</span>
-                    {% endif %}
+                    {{ difference.prevResult.result }}
+                </td>
+                <td>
+                    {{ difference.result.result }}
                 </td>
             </tr>
         {% endfor %}
@@ -30,7 +30,7 @@
 
     <div class="text-center">
         {% if not prev_page is null %}
-            <a class="btn btn-default" href="/status/{{ monitoring.id }}/{{ prev_page }}">
+            <a class="btn btn-default" href="/status-history/{{ monitoring.id }}/{{ prev_page }}">
                 <i class="glyphicon glyphicon-chevron-left"></i> Previous page
             </a>
         {% endif %}
@@ -39,12 +39,8 @@
             <i class="glyphicon glyphicon-chevron-up"></i> Home
         </a>
 
-        <a href="/status-history/{{ monitoring.id }}" class="btn btn-default">
-            <i class="glyphicon glyphicon-time"></i> Status history
-        </a>
-
         {% if not next_page is null %}
-            <a class="btn btn-default" href="/status/{{ monitoring.id }}/{{ next_page }}">
+            <a class="btn btn-default" href="/status-history/{{ monitoring.id }}/{{ next_page }}">
                 <i class="glyphicon glyphicon-chevron-right"></i> Next page
             </a>
         {% endif %}

@@ -1,0 +1,6 @@
+<div class="panel panel-default">
+    <div class="panel-body">
+        <span class="lead">{{ monitoring.name }}</span>
+        <span class="text-info">{{ monitoring.url }}</span>
+    </div>
+</div>
