@@ -1,0 +1,17 @@
+{% macro pagination(page_name, monitoring, prev_page, next_page) %}
+    {% if not prev_page is null %}
+        <a class="btn btn-default" href="/{{ page_name }}/{{ monitoring.id }}/{{ prev_page }}">
+            <i class="glyphicon glyphicon-chevron-left"></i> Previous page
+        </a>
+    {% endif %}
+
+    <a href="/" class="btn btn-default">
+        <i class="glyphicon glyphicon-chevron-up"></i> Home
+    </a>
+
+    {% if not next_page is null %}
+        <a class="btn btn-default" href="/{{ page_name }}/{{ monitoring.id }}/{{ next_page }}">
+            <i class="glyphicon glyphicon-chevron-right"></i> Next page
+        </a>
+    {% endif %}
+{% endmacro %}

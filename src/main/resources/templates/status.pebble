@@ -28,25 +28,14 @@
         {% endfor %}
     </table>
 
-    <div class="text-center">
-        {% if not prev_page is null %}
-            <a class="btn btn-default" href="/status/{{ monitoring.id }}/{{ prev_page }}">
-                <i class="glyphicon glyphicon-chevron-left"></i> Previous page
-            </a>
-        {% endif %}
+    <p class="text-center">
+        {% import "include/status_history/pagination" %}
+        {{ pagination("status", monitoring, prev_page, next_page) }}
+    </p>
 
-        <a href="/" class="btn btn-default">
-            <i class="glyphicon glyphicon-chevron-up"></i> Home
-        </a>
-
+    <p class="text-center">
         <a href="/status-history/{{ monitoring.id }}" class="btn btn-default">
-            <i class="glyphicon glyphicon-time"></i> Status history
+            <i class="glyphicon glyphicon-time"></i> Status change history
         </a>
-
-        {% if not next_page is null %}
-            <a class="btn btn-default" href="/status/{{ monitoring.id }}/{{ next_page }}">
-                <i class="glyphicon glyphicon-chevron-right"></i> Next page
-            </a>
-        {% endif %}
-    </div>
+    </p>
 {% endblock %}
