@@ -6,7 +6,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import ru.doublebyte.availabilitymonitor.managers.MonitoringManager;
+import ru.doublebyte.availabilitymonitor.managers.TestResultManager;
 import ru.doublebyte.availabilitymonitor.types.Monitoring;
+import ru.doublebyte.availabilitymonitor.types.TestResult;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -16,19 +18,33 @@ import java.util.stream.Collectors;
 public class IndexController {
 
     private final MonitoringManager monitoringManager;
+    private final TestResultManager testResultManager;
 
     ///////////////////////////////////////////////////////////////////////////
 
     @Autowired
-    public IndexController(MonitoringManager monitoringManager) {
+    public IndexController(
+            MonitoringManager monitoringManager,
+            TestResultManager testResultManager
+    ) {
         this.monitoringManager = monitoringManager;
+        this.testResultManager = testResultManager;
     }
 
     ///////////////////////////////////////////////////////////////////////////
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public String index(Model model) {
-        model.addAttribute("monitorings", monitoringManager.getAll());
+        List<Monitoring> monitorings = monitoringManager.getAll()
+                .stream()
+                .map(it -> {
+                    TestResult testResult = testResultManager.getLatestForMonitoring(it.getId());
+                    it.setLatestTestResult(testResult);
+                    return it;
+                })
+                .collect(Collectors.toList());
+
+        model.addAttribute("monitorings", monitorings);
         return "index";
     }
 

@@ -35,6 +35,7 @@ public class MainConfiguration {
         return new MonitoringManager(monitoringRepository, schedulerManager());
     }
 
+    @Bean
     public TestResultManager testResultManager() {
         return new TestResultManager(testResultRepository);
     }

@@ -62,6 +62,8 @@ public class UrlChecker {
             return Result.NO_CONNECTION;
         }
 
+        logger.debug("Request success, url: {}", url);
+
         return Result.SUCCESS;
     }
 
@@ -106,6 +108,14 @@ public class UrlChecker {
 
         @Override
         public String toString() {
+            return display;
+        }
+
+        public boolean isSuccess() {
+            return success;
+        }
+
+        public String getDisplay() {
             return display;
         }
     }

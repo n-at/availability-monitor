@@ -44,9 +44,17 @@
                     </div>
 
                     <div class="col-md-1 col-xs-2">
-                        <span class="monitoring-status">
-                            {# TODO #}
-                        </span>
+                        <a class="monitoring-status" href="/status/{{ monitoring.id }}">
+                            {% if not monitoring.latestTestResult is null %}
+                                {% if monitoring.latestTestResult.result.success %}
+                                    <span class="text-success">{{ monitoring.latestTestResult.result }}</span>
+                                {% else %}
+                                    <span class="test-danger">{{ monitoring.latestTestResult.result }}</span>
+                                {% endif %}
+                            {% else %}
+                                <span class="text-info">NOT TESTED</span>
+                            {% endif %}
+                        </a>
                     </div>
 
                     <div class="col-md-3 col-md-offset-2 col-xs-2">

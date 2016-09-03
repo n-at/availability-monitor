@@ -5,4 +5,6 @@ import ru.doublebyte.availabilitymonitor.types.TestResult;
 
 public interface TestResultRepository extends CrudRepository<TestResult, Long> {
 
+    TestResult findFirstByMonitoringIdOrderByCreatedAtDesc(Long monitoringId);
+
 }

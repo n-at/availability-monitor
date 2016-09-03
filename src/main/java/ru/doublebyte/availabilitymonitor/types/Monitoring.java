@@ -26,6 +26,9 @@ public class Monitoring {
     @Column(name = "respond_interval", nullable = false)
     private Integer respondInterval;
 
+    @Transient
+    private TestResult latestTestResult;
+
     ///////////////////////////////////////////////////////////////////////////
 
     public Monitoring() {
@@ -88,5 +91,13 @@ public class Monitoring {
 
     public void setActive(Boolean active) {
         this.active = active;
+    }
+
+    public TestResult getLatestTestResult() {
+        return latestTestResult;
+    }
+
+    public void setLatestTestResult(TestResult latestTestResult) {
+        this.latestTestResult = latestTestResult;
     }
 }

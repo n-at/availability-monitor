@@ -35,4 +35,18 @@ public class TestResultManager {
         return true;
     }
 
+    /**
+     * Get latest test result for monitoring with given id
+     * @param monitoringId
+     * @return
+     */
+    public TestResult getLatestForMonitoring(Long monitoringId) {
+        try {
+            return testResultRepository.findFirstByMonitoringIdOrderByCreatedAtDesc(monitoringId);
+        } catch (Exception e) {
+            logger.error("An error occurred while finding latest result for monitoring with id " + monitoringId, e);
+            return null;
+        }
+    }
+
 }
