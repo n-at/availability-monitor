@@ -1,4 +1,4 @@
-package ru.doublebyte.availabilitymonitor.types;
+package ru.doublebyte.availabilitymonitor.entities;
 
 import javax.persistence.*;
 

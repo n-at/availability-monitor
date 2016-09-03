@@ -5,7 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import ru.doublebyte.availabilitymonitor.repositories.TestResultDifferenceRepository;
-import ru.doublebyte.availabilitymonitor.types.TestResultDifference;
+import ru.doublebyte.availabilitymonitor.entities.TestResultDifference;
 
 import java.util.ArrayList;
 import java.util.List;

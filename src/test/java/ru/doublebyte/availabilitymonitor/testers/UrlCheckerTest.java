@@ -1,4 +1,4 @@
-package ru.doublebyte.availabilitymonitor.types;
+package ru.doublebyte.availabilitymonitor.testers;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

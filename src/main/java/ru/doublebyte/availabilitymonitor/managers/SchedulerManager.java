@@ -4,8 +4,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.TaskScheduler;
 import ru.doublebyte.availabilitymonitor.factories.TesterFactory;
-import ru.doublebyte.availabilitymonitor.types.Monitoring;
-import ru.doublebyte.availabilitymonitor.types.Tester;
+import ru.doublebyte.availabilitymonitor.entities.Monitoring;
+import ru.doublebyte.availabilitymonitor.testers.Tester;
 
 import java.util.HashMap;
 import java.util.Map;

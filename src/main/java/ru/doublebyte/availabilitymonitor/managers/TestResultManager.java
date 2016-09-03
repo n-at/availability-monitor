@@ -5,9 +5,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import ru.doublebyte.availabilitymonitor.repositories.TestResultRepository;
-import ru.doublebyte.availabilitymonitor.types.TestResult;
-import ru.doublebyte.availabilitymonitor.types.TestResultDifference;
-import ru.doublebyte.availabilitymonitor.types.UrlChecker;
+import ru.doublebyte.availabilitymonitor.entities.TestResult;
+import ru.doublebyte.availabilitymonitor.entities.TestResultDifference;
+import ru.doublebyte.availabilitymonitor.testers.UrlChecker;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -62,7 +62,7 @@ public class TestResultManager {
     }
 
     /**
-     * Save test result and send notification (if necessary)
+     * Save test result
      * @param testResult
      * @return
      */

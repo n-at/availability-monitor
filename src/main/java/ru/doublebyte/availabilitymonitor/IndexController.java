@@ -8,9 +8,9 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import ru.doublebyte.availabilitymonitor.managers.MonitoringManager;
 import ru.doublebyte.availabilitymonitor.managers.TestResultDifferenceManager;
 import ru.doublebyte.availabilitymonitor.managers.TestResultManager;
-import ru.doublebyte.availabilitymonitor.types.Monitoring;
-import ru.doublebyte.availabilitymonitor.types.TestResult;
-import ru.doublebyte.availabilitymonitor.types.TestResultDifference;
+import ru.doublebyte.availabilitymonitor.entities.Monitoring;
+import ru.doublebyte.availabilitymonitor.entities.TestResult;
+import ru.doublebyte.availabilitymonitor.entities.TestResultDifference;
 
 import java.util.List;
 import java.util.stream.Collectors;

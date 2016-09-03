@@ -1,7 +1,9 @@
-package ru.doublebyte.availabilitymonitor.types;
+package ru.doublebyte.availabilitymonitor.testers;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ru.doublebyte.availabilitymonitor.entities.Monitoring;
+import ru.doublebyte.availabilitymonitor.entities.TestResult;
 import ru.doublebyte.availabilitymonitor.managers.TestResultManager;
 
 public class UrlTester implements Tester {

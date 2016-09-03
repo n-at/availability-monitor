@@ -1,4 +1,6 @@
-package ru.doublebyte.availabilitymonitor.types;
+package ru.doublebyte.availabilitymonitor.entities;
+
+import ru.doublebyte.availabilitymonitor.testers.UrlChecker;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;

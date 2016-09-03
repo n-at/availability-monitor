@@ -1,9 +1,9 @@
 package ru.doublebyte.availabilitymonitor.factories;
 
 import ru.doublebyte.availabilitymonitor.managers.TestResultManager;
-import ru.doublebyte.availabilitymonitor.types.Monitoring;
-import ru.doublebyte.availabilitymonitor.types.Tester;
-import ru.doublebyte.availabilitymonitor.types.UrlTester;
+import ru.doublebyte.availabilitymonitor.entities.Monitoring;
+import ru.doublebyte.availabilitymonitor.testers.Tester;
+import ru.doublebyte.availabilitymonitor.testers.UrlTester;
 
 public class UrlTesterFactory implements TesterFactory {
 

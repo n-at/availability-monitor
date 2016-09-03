@@ -4,7 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 import ru.doublebyte.availabilitymonitor.repositories.MonitoringRepository;
-import ru.doublebyte.availabilitymonitor.types.Monitoring;
+import ru.doublebyte.availabilitymonitor.entities.Monitoring;
 
 import java.util.ArrayList;
 import java.util.List;

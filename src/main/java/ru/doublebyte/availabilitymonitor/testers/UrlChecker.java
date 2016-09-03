@@ -1,4 +1,4 @@
-package ru.doublebyte.availabilitymonitor.types;
+package ru.doublebyte.availabilitymonitor.testers;
 
 import org.apache.http.*;
 import org.apache.http.client.ClientProtocolException;

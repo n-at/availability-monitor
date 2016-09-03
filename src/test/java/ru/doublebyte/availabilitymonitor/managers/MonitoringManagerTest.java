@@ -3,7 +3,7 @@ package ru.doublebyte.availabilitymonitor.managers;
 import org.junit.Before;
 import org.junit.Test;
 import ru.doublebyte.availabilitymonitor.repositories.MonitoringRepository;
-import ru.doublebyte.availabilitymonitor.types.Monitoring;
+import ru.doublebyte.availabilitymonitor.entities.Monitoring;
 
 import java.util.List;
 

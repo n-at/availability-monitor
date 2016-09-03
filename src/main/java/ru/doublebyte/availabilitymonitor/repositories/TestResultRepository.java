@@ -2,7 +2,7 @@ package ru.doublebyte.availabilitymonitor.repositories;
 
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.CrudRepository;
-import ru.doublebyte.availabilitymonitor.types.TestResult;
+import ru.doublebyte.availabilitymonitor.entities.TestResult;
 
 import java.util.List;
 
