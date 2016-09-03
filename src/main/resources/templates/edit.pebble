@@ -11,9 +11,7 @@
             {% include "include/message/error" %}
 
             <form method="post">
-
-                {% include "include/monitoring_form_fields" %}
-
+                {% include "include/monitoring_form/fields" %}
                 <button type="submit" class="btn btn-block btn-primary">Save</button>
             </form>
 
