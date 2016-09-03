@@ -3,7 +3,7 @@
         {% if monitoring.latestTestResult.result.success %}
             <span class="text-success">{{ monitoring.latestTestResult.result }}</span>
         {% else %}
-            <span class="test-danger">{{ monitoring.latestTestResult.result }}</span>
+            <span class="text-danger">{{ monitoring.latestTestResult.result }}</span>
         {% endif %}
     {% else %}
         <span class="text-info">NOT TESTED</span>
