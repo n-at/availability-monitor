@@ -6,6 +6,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import ru.doublebyte.availabilitymonitor.repositories.TestResultRepository;
 import ru.doublebyte.availabilitymonitor.types.TestResult;
+import ru.doublebyte.availabilitymonitor.types.TestResultDifference;
 import ru.doublebyte.availabilitymonitor.types.UrlChecker;
 
 import java.util.ArrayList;
@@ -16,11 +17,16 @@ public class TestResultManager {
     private static final Logger logger = LoggerFactory.getLogger(TestResultManager.class);
 
     private TestResultRepository testResultRepository;
+    private TestResultDifferenceManager testResultDifferenceManager;
 
     ///////////////////////////////////////////////////////////////////////////
 
-    public TestResultManager(TestResultRepository testResultRepository) {
+    public TestResultManager(
+            TestResultRepository testResultRepository,
+            TestResultDifferenceManager testResultDifferenceManager
+    ) {
         this.testResultRepository = testResultRepository;
+        this.testResultDifferenceManager = testResultDifferenceManager;
     }
 
     ///////////////////////////////////////////////////////////////////////////
@@ -73,17 +79,17 @@ public class TestResultManager {
             return false;
         }
 
-        checkDifferences(latestTestResult, testResult);
+        checkDifferences(testResult, latestTestResult);
 
         return true;
     }
 
     /**
      * Process result differences
-     * @param latestTestResult
      * @param currentTestResult
+     * @param latestTestResult
      */
-    private void checkDifferences(TestResult latestTestResult, TestResult currentTestResult) {
+    private void checkDifferences(TestResult currentTestResult, TestResult latestTestResult) {
         UrlChecker.Result latestResult = latestTestResult == null ? null : latestTestResult.getResult();
         UrlChecker.Result currentResult = currentTestResult.getResult();
 
@@ -91,8 +97,11 @@ public class TestResultManager {
             return;
         }
 
+        TestResultDifference testResultDifference =
+                new TestResultDifference(currentTestResult, latestTestResult);
+        testResultDifferenceManager.add(testResultDifference);
+
         //TODO schedule notification
-        //TODO save difference
     }
 
 }
