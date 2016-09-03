@@ -1,11 +1,5 @@
+{% import "../status_history/result_style" %}
+
 <a class="monitoring-status" href="/status/{{ monitoring.id }}">
-    {% if not monitoring.latestTestResult is null %}
-        {% if monitoring.latestTestResult.result.success %}
-            <span class="text-success">{{ monitoring.latestTestResult.result }}</span>
-        {% else %}
-            <span class="text-danger">{{ monitoring.latestTestResult.result }}</span>
-        {% endif %}
-    {% else %}
-        <span class="text-info">NOT TESTED</span>
-    {% endif %}
+    {{ result_style(monitoring.latestTestResult.result) }}
 </a>

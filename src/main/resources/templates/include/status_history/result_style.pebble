@@ -1,0 +1,11 @@
+{% macro result_style(result) %}
+    {% if not result is null %}
+        {% if result.success %}
+            <span class="text-success">{{ result }}</span>
+        {% else %}
+            <span class="text-danger">{{ result }}</span>
+        {% endif %}
+    {% else %}
+        <span class="text-info">NOT TESTED</span>
+    {% endif %}
+{% endmacro %}

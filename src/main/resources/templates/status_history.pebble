@@ -5,6 +5,9 @@
 {% endblock %}
 
 {% block content %}
+    {% import "include/status_history/pagination" %}
+    {% import "include/status_history/result_style" %}
+
     {% include "include/status_history/monitoring_info" %}
 
     <table class="table table-condensed table-hover">
@@ -19,17 +22,16 @@
                     {{ difference.result.createdAtFormatted }}
                 </td>
                 <td>
-                    {{ difference.prevResult.result }}
+                    {{ result_style(difference.prevResult.result) }}
                 </td>
                 <td>
-                    {{ difference.result.result }}
+                    {{ result_style(difference.result.result) }}
                 </td>
             </tr>
         {% endfor %}
     </table>
 
     <p class="text-center">
-        {% import "include/status_history/pagination" %}
         {{ pagination("status-history", monitoring, prev_page, next_page) }}
     </p>
 {% endblock %}

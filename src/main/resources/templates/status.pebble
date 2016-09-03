@@ -5,6 +5,9 @@
 {% endblock %}
 
 {% block content %}
+    {% import "include/status_history/pagination" %}
+    {% import "include/status_history/result_style" %}
+
     {% include "include/status_history/monitoring_info" %}
 
     <table class="table table-condensed table-hover">
@@ -18,18 +21,13 @@
                     {{ result.createdAtFormatted }}
                 </td>
                 <td>
-                    {% if result.result.success %}
-                        <span class="text-success">{{ result.result }}</span>
-                    {% else %}
-                        <span class="text-danger">{{ result.result }}</span>
-                    {% endif %}
+                    {{ result_style(result.result) }}
                 </td>
             </tr>
         {% endfor %}
     </table>
 
     <p class="text-center">
-        {% import "include/status_history/pagination" %}
         {{ pagination("status", monitoring, prev_page, next_page) }}
     </p>
 
