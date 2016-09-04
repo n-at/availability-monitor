@@ -10,6 +10,9 @@
             <a href="/add" class="btn btn-success">
                 <i class="glyphicon glyphicon-plus"></i> Add
             </a>
+            <a href="/email" class="btn btn-default">
+                <i class="glyphicon glyphicon-envelope"></i> Notification emails
+            </a>
         </div>
     </div>
 

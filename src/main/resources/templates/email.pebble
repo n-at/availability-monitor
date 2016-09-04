@@ -1,0 +1,44 @@
+{% extends "layout/default" %}
+
+{% block title %}
+    notification emails
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-6 col-md-offset-3">
+
+        {% include "include/message/error" %}
+        {% include "include/message/success" %}
+
+        {% if emails is empty %}
+            <p class="alert alert-info lead">
+                No emails is set
+            </p>
+        {% endif %}
+
+        <ul class="list-group">
+            {% for email in emails %}
+                <li class="list-group-item">
+                    <span class="lead">{{ email.address }}</span>
+                    <div class="pull-right">
+                        <a href="/email/delete/{{ email.id }}" class="text-danger">
+                            <i class="glyphicon glyphicon-remove"></i> Delete
+                        </a>
+                    </div>
+                    <div class="clearfix"></div>
+                </li>
+            {% endfor %}
+        </ul>
+
+        <form method="post">
+            <div class="form-group">
+                <label class="control-label" for="address">Add new email address</label>
+                <input type="text" name="address" id="address" class="form-control" required>
+            </div>
+            <button type="submit" class="btn btn-block btn-primary">Add</button>
+        </form>
+
+    </div>
+</div>
+{% endblock %}

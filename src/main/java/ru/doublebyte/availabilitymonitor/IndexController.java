@@ -5,6 +5,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import ru.doublebyte.availabilitymonitor.entities.Email;
+import ru.doublebyte.availabilitymonitor.managers.EmailManager;
 import ru.doublebyte.availabilitymonitor.managers.MonitoringManager;
 import ru.doublebyte.availabilitymonitor.managers.TestResultDifferenceManager;
 import ru.doublebyte.availabilitymonitor.managers.TestResultManager;
@@ -24,6 +26,7 @@ public class IndexController {
     private final MonitoringManager monitoringManager;
     private final TestResultManager testResultManager;
     private final TestResultDifferenceManager testResultDifferenceManager;
+    private final EmailManager emailManager;
 
     ///////////////////////////////////////////////////////////////////////////
 
@@ -31,11 +34,13 @@ public class IndexController {
     public IndexController(
             MonitoringManager monitoringManager,
             TestResultManager testResultManager,
-            TestResultDifferenceManager testResultDifferenceManager
+            TestResultDifferenceManager testResultDifferenceManager,
+            EmailManager emailManager
     ) {
         this.monitoringManager = monitoringManager;
         this.testResultManager = testResultManager;
         this.testResultDifferenceManager = testResultDifferenceManager;
+        this.emailManager = emailManager;
     }
 
     ///////////////////////////////////////////////////////////////////////////
@@ -261,6 +266,48 @@ public class IndexController {
             RedirectAttributes redirectAttributes
     ) {
         return statusHistory(id, 1, model, redirectAttributes);
+    }
+
+    ///////////////////////////////////////////////////////////////////////////
+
+    @RequestMapping(value = "/email", method = RequestMethod.GET)
+    public String emailForm(Model model) {
+        model.addAttribute("emails", emailManager.getAll());
+        return "email";
+    }
+
+    @RequestMapping(value = "/email", method = RequestMethod.POST)
+    public String email(
+            @RequestParam("address") String address,
+            RedirectAttributes redirectAttributes
+    ) {
+        if (address == null || address.isEmpty()) {
+            redirectAttributes.addFlashAttribute("error_message", "Address should not be empty");
+            return "redirect:/email";
+        }
+
+        Email email = new Email(address);
+        if (emailManager.add(email)) {
+            redirectAttributes.addFlashAttribute("success_message", "Email added");
+        } else {
+            redirectAttributes.addFlashAttribute("error_message", "An error occurred while adding new email");
+        }
+
+        return "redirect:/email";
+    }
+
+    @RequestMapping(value = "/email/delete/{id}", method = RequestMethod.GET)
+    public String emailDelete(
+            @PathVariable("id") Long id,
+            RedirectAttributes redirectAttributes
+    ) {
+        if (emailManager.delete(id)) {
+            redirectAttributes.addFlashAttribute("success_message", "Email removed");
+        } else {
+            redirectAttributes.addFlashAttribute("error_message", "An error occurred while removing email");
+        }
+
+        return "redirect:/email";
     }
 
     ///////////////////////////////////////////////////////////////////////////
