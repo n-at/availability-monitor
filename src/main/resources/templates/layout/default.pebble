@@ -16,7 +16,7 @@
 <div class="container">
     <div class="page-header">
         <h2>
-            availability-monitor
+            <a href="/">availability-monitor</a>
             <small>{% block title %}{% endblock %}</small>
         </h2>
     </div>
