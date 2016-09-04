@@ -42,4 +42,11 @@
             </li>
         {% endfor %}
     </ul>
+
+    {% if monitorings is empty %}
+        <p class="alert alert-info lead">
+            Empty monitoring list. Click "Add" button to create one
+        </p>
+    {% endif %}
+
 {% endblock %}
