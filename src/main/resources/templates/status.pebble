@@ -10,22 +10,30 @@
 
     {% include "include/status_history/monitoring_info" %}
 
-    <table class="table table-condensed table-hover">
-        <tr>
-            <th>Date</th>
-            <th>Status</th>
-        </tr>
-        {% for result in test_results %}
+    {% if test_results is empty %}
+        <p class="alert alert-info lead">
+            Empty status history
+        </p>
+    {% endif %}
+
+    {% if not test_results is empty %}
+        <table class="table table-condensed table-hover">
             <tr>
-                <td>
-                    {{ result.createdAtFormatted }}
-                </td>
-                <td>
-                    {{ result_style(result.result) }}
-                </td>
+                <th>Date</th>
+                <th>Status</th>
             </tr>
-        {% endfor %}
-    </table>
+            {% for result in test_results %}
+                <tr>
+                    <td>
+                        {{ result.createdAtFormatted }}
+                    </td>
+                    <td>
+                        {{ result_style(result.result) }}
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% endif %}
 
     <p class="text-center">
         {{ pagination("status", monitoring, prev_page, next_page) }}

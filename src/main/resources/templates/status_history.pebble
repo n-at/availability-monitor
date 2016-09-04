@@ -10,26 +10,34 @@
 
     {% include "include/status_history/monitoring_info" %}
 
-    <table class="table table-condensed table-hover">
-        <tr>
-            <th>Date</th>
-            <th>Old status</th>
-            <th>New status</th>
-        </tr>
-        {% for difference in differences %}
+    {% if differences is empty %}
+        <p class="alert alert-info lead">
+            Empty status change history
+        </p>
+    {% endif %}
+
+    {% if not differences is empty %}
+        <table class="table table-condensed table-hover">
             <tr>
-                <td>
-                    {{ difference.result.createdAtFormatted }}
-                </td>
-                <td>
-                    {{ result_style(difference.prevResult.result) }}
-                </td>
-                <td>
-                    {{ result_style(difference.result.result) }}
-                </td>
+                <th>Date</th>
+                <th>Old status</th>
+                <th>New status</th>
             </tr>
-        {% endfor %}
-    </table>
+            {% for difference in differences %}
+                <tr>
+                    <td>
+                        {{ difference.result.createdAtFormatted }}
+                    </td>
+                    <td>
+                        {{ result_style(difference.prevResult.result) }}
+                    </td>
+                    <td>
+                        {{ result_style(difference.result.result) }}
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% endif %}
 
     <p class="text-center">
         {{ pagination("status-history", monitoring, prev_page, next_page) }}
