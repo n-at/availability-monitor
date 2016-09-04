@@ -34,7 +34,7 @@ public class TestResultDifferenceManager {
     public boolean add(TestResultDifference testResultDifference) {
         try {
             testResultDifference = testResultDifferenceRepository.save(testResultDifference);
-            logger.info("Added test result difference with id {}", testResultDifference.getId());
+            logger.debug("Added test result difference with id {}", testResultDifference.getId());
         } catch (Exception e) {
             logger.error("An error occurred while adding test result difference", e);
             return false;
