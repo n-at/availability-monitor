@@ -35,7 +35,7 @@ public class UrlTester implements Tester {
 
         UrlChecker.Result result = urlChecker.check();
         TestResult testResult = new TestResult(monitoring.getId(), result);
-        testResultManager.add(testResult);
+        testResultManager.add(monitoring, testResult);
     }
 
 }

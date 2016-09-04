@@ -12,6 +12,7 @@ spring.datasource:
 
 #Email settings
 spring.mail:
+  from: mail@example.com
   username: mail@example.com
   password: ******
   host: smtp.example.com

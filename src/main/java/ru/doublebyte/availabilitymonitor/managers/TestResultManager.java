@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import ru.doublebyte.availabilitymonitor.entities.Monitoring;
 import ru.doublebyte.availabilitymonitor.repositories.TestResultRepository;
 import ru.doublebyte.availabilitymonitor.entities.TestResult;
 import ru.doublebyte.availabilitymonitor.entities.TestResultDifference;
@@ -18,15 +19,18 @@ public class TestResultManager {
 
     private TestResultRepository testResultRepository;
     private TestResultDifferenceManager testResultDifferenceManager;
+    private EmailManager emailManager;
 
     ///////////////////////////////////////////////////////////////////////////
 
     public TestResultManager(
             TestResultRepository testResultRepository,
-            TestResultDifferenceManager testResultDifferenceManager
+            TestResultDifferenceManager testResultDifferenceManager,
+            EmailManager emailManager
     ) {
         this.testResultRepository = testResultRepository;
         this.testResultDifferenceManager = testResultDifferenceManager;
+        this.emailManager = emailManager;
     }
 
     ///////////////////////////////////////////////////////////////////////////
@@ -63,10 +67,11 @@ public class TestResultManager {
 
     /**
      * Save test result
+     * @param monitoring
      * @param testResult
      * @return
      */
-    public boolean add(TestResult testResult) {
+    public boolean add(Monitoring monitoring, TestResult testResult) {
         TestResult latestTestResult = getLatestForMonitoring(testResult.getMonitoringId());
 
         try {
@@ -79,17 +84,18 @@ public class TestResultManager {
             return false;
         }
 
-        checkDifferences(testResult, latestTestResult);
+        checkDifferences(monitoring, testResult, latestTestResult);
 
         return true;
     }
 
     /**
      * Process result differences
+     * @param monitoring
      * @param currentTestResult
      * @param latestTestResult
      */
-    private void checkDifferences(TestResult currentTestResult, TestResult latestTestResult) {
+    private void checkDifferences(Monitoring monitoring, TestResult currentTestResult, TestResult latestTestResult) {
         UrlChecker.Result latestResult = latestTestResult == null ? null : latestTestResult.getResult();
         UrlChecker.Result currentResult = currentTestResult.getResult();
 
@@ -101,7 +107,7 @@ public class TestResultManager {
                 new TestResultDifference(currentTestResult, latestTestResult);
         testResultDifferenceManager.add(testResultDifference);
 
-        //TODO schedule notification
+        emailManager.sendNotifications(monitoring, currentTestResult, latestTestResult);
     }
 
 }

@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.scheduling.TaskScheduler;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
@@ -16,6 +17,7 @@ import ru.doublebyte.availabilitymonitor.repositories.TestResultDifferenceReposi
 import ru.doublebyte.availabilitymonitor.repositories.TestResultRepository;
 
 @Configuration
+@EnableAsync
 public class MainConfiguration {
 
     private final MonitoringRepository monitoringRepository;
@@ -23,16 +25,23 @@ public class MainConfiguration {
     private final TestResultDifferenceRepository testResultDifferenceRepository;
     private final EmailRepository emailRepository;
 
+    private final JavaMailSender javaMailSender;
+
     @Value("${monitor.thread-pool-size}")
     private int threadPoolSize;
 
+    @Value("${spring.mail.from}")
+    private String notificationFromAddress;
+
     @Autowired
     public MainConfiguration(
+            JavaMailSender javaMailSender,
             MonitoringRepository monitoringRepository,
             TestResultRepository testResultRepository,
             TestResultDifferenceRepository testResultDifferenceRepository,
             EmailRepository emailRepository
     ) {
+        this.javaMailSender = javaMailSender;
         this.monitoringRepository = monitoringRepository;
         this.testResultRepository = testResultRepository;
         this.testResultDifferenceRepository = testResultDifferenceRepository;
@@ -58,7 +67,11 @@ public class MainConfiguration {
 
     @Bean
     public TestResultManager testResultManager() {
-        return new TestResultManager(testResultRepository, testResultDifferenceManager());
+        return new TestResultManager(
+                testResultRepository,
+                testResultDifferenceManager(),
+                emailManager()
+        );
     }
 
     @Bean
@@ -68,7 +81,7 @@ public class MainConfiguration {
 
     @Bean
     public EmailManager emailManager() {
-        return new EmailManager(emailRepository);
+        return new EmailManager(javaMailSender, emailRepository, notificationFromAddress);
     }
 
     @Bean
