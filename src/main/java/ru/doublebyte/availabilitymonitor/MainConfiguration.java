@@ -1,9 +1,11 @@
 package ru.doublebyte.availabilitymonitor;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.TaskScheduler;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 import ru.doublebyte.availabilitymonitor.factories.TesterFactory;
 import ru.doublebyte.availabilitymonitor.factories.UrlTesterFactory;
@@ -21,6 +23,9 @@ public class MainConfiguration {
     private final TestResultDifferenceRepository testResultDifferenceRepository;
     private final EmailRepository emailRepository;
 
+    @Value("${monitor.thread-pool-size}")
+    private int threadPoolSize;
+
     @Autowired
     public MainConfiguration(
             MonitoringRepository monitoringRepository,
@@ -36,7 +41,9 @@ public class MainConfiguration {
 
     @Bean
     public TaskScheduler taskScheduler() {
-        return new ThreadPoolTaskScheduler();
+        ThreadPoolTaskScheduler threadPoolTaskScheduler = new ThreadPoolTaskScheduler();
+        threadPoolTaskScheduler.setPoolSize(threadPoolSize);
+        return threadPoolTaskScheduler;
     }
 
     @Bean

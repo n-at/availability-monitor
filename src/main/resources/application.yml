@@ -1,3 +1,6 @@
 spring.jpa:
   generate-ddl: false
   hibernate.ddl-auto: none
+
+monitor:
+  thread-pool-size: 5
