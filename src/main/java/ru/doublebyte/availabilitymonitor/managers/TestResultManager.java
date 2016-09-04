@@ -19,18 +19,18 @@ public class TestResultManager {
 
     private TestResultRepository testResultRepository;
     private TestResultDifferenceManager testResultDifferenceManager;
-    private EmailManager emailManager;
+    private NotificationManager notificationManager;
 
     ///////////////////////////////////////////////////////////////////////////
 
     public TestResultManager(
             TestResultRepository testResultRepository,
             TestResultDifferenceManager testResultDifferenceManager,
-            EmailManager emailManager
+            NotificationManager notificationManager
     ) {
         this.testResultRepository = testResultRepository;
         this.testResultDifferenceManager = testResultDifferenceManager;
-        this.emailManager = emailManager;
+        this.notificationManager = notificationManager;
     }
 
     ///////////////////////////////////////////////////////////////////////////
@@ -107,7 +107,7 @@ public class TestResultManager {
                 new TestResultDifference(currentTestResult, latestTestResult);
         testResultDifferenceManager.add(testResultDifference);
 
-        emailManager.sendNotifications(monitoring, currentTestResult, latestTestResult);
+        notificationManager.sendNotifications(monitoring, currentTestResult, latestTestResult);
     }
 
 }

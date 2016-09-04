@@ -67,11 +67,8 @@ public class MainConfiguration {
 
     @Bean
     public TestResultManager testResultManager() {
-        return new TestResultManager(
-                testResultRepository,
-                testResultDifferenceManager(),
-                emailManager()
-        );
+        return new TestResultManager(testResultRepository, testResultDifferenceManager(),
+                notificationManager());
     }
 
     @Bean
@@ -81,7 +78,12 @@ public class MainConfiguration {
 
     @Bean
     public EmailManager emailManager() {
-        return new EmailManager(javaMailSender, emailRepository, notificationFromAddress);
+        return new EmailManager(emailRepository);
+    }
+
+    @Bean
+    public NotificationManager notificationManager() {
+        return new NotificationManager(javaMailSender, emailManager(), notificationFromAddress);
     }
 
     @Bean
