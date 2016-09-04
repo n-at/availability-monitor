@@ -13,11 +13,13 @@ JDK >= 8 required.
 Run
 ===
 
+In `application.yml` set up email server settings (see example in `application.sample.yml`).
+
 Run packaged version from `target` directory. Or with Spring Boot maven plugin:
  
     $ ./mvnw spring-boot:run
 
-In `application.yml` set up email server settings (see example in `application.sample.yml`).
+Open [http://localhost:8080](http://localhost:8080) in browser.
 
 License
 =======
