@@ -8,7 +8,7 @@ import ru.doublebyte.availabilitymonitor.entities.Monitoring;
 import ru.doublebyte.availabilitymonitor.repositories.TestResultRepository;
 import ru.doublebyte.availabilitymonitor.entities.TestResult;
 import ru.doublebyte.availabilitymonitor.entities.TestResultDifference;
-import ru.doublebyte.availabilitymonitor.testers.UrlChecker;
+import ru.doublebyte.availabilitymonitor.testers.Result;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -96,8 +96,8 @@ public class TestResultManager {
      * @param latestTestResult
      */
     private void checkDifferences(Monitoring monitoring, TestResult currentTestResult, TestResult latestTestResult) {
-        UrlChecker.Result latestResult = latestTestResult == null ? null : latestTestResult.getResult();
-        UrlChecker.Result currentResult = currentTestResult.getResult();
+        Result latestResult = latestTestResult == null ? null : latestTestResult.getResult();
+        Result currentResult = currentTestResult.getResult();
 
         if (currentResult == latestResult) {
             return;

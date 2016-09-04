@@ -1,6 +1,6 @@
 package ru.doublebyte.availabilitymonitor.entities;
 
-import ru.doublebyte.availabilitymonitor.testers.UrlChecker;
+import ru.doublebyte.availabilitymonitor.testers.Result;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -24,7 +24,7 @@ public class TestResult {
     private LocalDateTime createdAt;
 
     @Column(name = "result", nullable = false)
-    private UrlChecker.Result result;
+    private Result result;
 
     ///////////////////////////////////////////////////////////////////////////
 
@@ -32,11 +32,11 @@ public class TestResult {
 
     }
 
-    public TestResult(Long monitoringId, UrlChecker.Result result) {
+    public TestResult(Long monitoringId, Result result) {
         this(monitoringId, LocalDateTime.now(), result);
     }
 
-    public TestResult(Long monitoringId, LocalDateTime createdAt, UrlChecker.Result result) {
+    public TestResult(Long monitoringId, LocalDateTime createdAt, Result result) {
         this.monitoringId = monitoringId;
         this.createdAt = createdAt;
         this.result = result;
@@ -70,11 +70,11 @@ public class TestResult {
         this.createdAt = createdAt;
     }
 
-    public UrlChecker.Result getResult() {
+    public Result getResult() {
         return result;
     }
 
-    public void setResult(UrlChecker.Result result) {
+    public void setResult(Result result) {
         this.result = result;
     }
 

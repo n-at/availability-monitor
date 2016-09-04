@@ -52,33 +52,33 @@ public class UrlCheckerTest {
     private void testSuccess() {
         UrlChecker checker = new UrlChecker(successUrl(), CHECK_TIMEOUT);
         for (int i = 0; i < 10; i++) {
-            UrlChecker.Result result = checker.check();
-            assertEquals(UrlChecker.Result.SUCCESS, result);
+            Result result = checker.check();
+            assertEquals(Result.SUCCESS, result);
         }
     }
 
     private void testTimeout() {
         UrlChecker checker = new UrlChecker(timeoutUrl(), CHECK_TIMEOUT);
-        UrlChecker.Result result = checker.check();
-        assertEquals(UrlChecker.Result.TIMEOUT, result);
+        Result result = checker.check();
+        assertEquals(Result.TIMEOUT, result);
     }
 
     private void testBad4XX() {
         UrlChecker checker = new UrlChecker(code4XXUrl(), CHECK_TIMEOUT);
-        UrlChecker.Result result = checker.check();
-        assertEquals(UrlChecker.Result.BAD_STATUS, result);
+        Result result = checker.check();
+        assertEquals(Result.BAD_STATUS, result);
     }
 
     private void testBad5XX() {
         UrlChecker checker = new UrlChecker(code5XXUrl(), CHECK_TIMEOUT);
-        UrlChecker.Result result = checker.check();
-        assertEquals(UrlChecker.Result.BAD_STATUS, result);
+        Result result = checker.check();
+        assertEquals(Result.BAD_STATUS, result);
     }
 
     private void testNoConnection() {
         UrlChecker checker = new UrlChecker(incorrectUrl(), CHECK_TIMEOUT);
-        UrlChecker.Result result = checker.check();
-        assertEquals(UrlChecker.Result.NO_CONNECTION, result);
+        Result result = checker.check();
+        assertEquals(Result.NO_CONNECTION, result);
     }
 
     ///////////////////////////////////////////////////////////////////////////
