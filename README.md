@@ -1,7 +1,7 @@
 availability-monitor
 ====================
 
-Check sites availability.
+Check sites availability. Send email on availability status change.
 
 Build
 =====
@@ -16,3 +16,10 @@ Run
 Run packaged version from `target` directory. Or with Spring Boot maven plugin:
  
     $ ./mvnw spring-boot:run
+
+In `application.yml` set up email server settings (see example in `application.sample.yml`).
+
+License
+=======
+
+BSD, see `LICENSE`

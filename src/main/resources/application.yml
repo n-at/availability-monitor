@@ -1,6 +1,15 @@
+#Disable Hibernate and JPA auto database creation features
 spring.jpa:
   generate-ddl: false
   hibernate.ddl-auto: none
 
+#Default datasource (uses H2)
+spring.datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:./database
+    username: sa
+    password:
+
+#Default monitoring settings
 monitor:
   thread-pool-size: 5
