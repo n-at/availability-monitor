@@ -26,8 +26,7 @@ public class TestResultDifference {
         cascade = CascadeType.REMOVE
     )
     @JoinColumn(
-        name = "prev_result_id",
-        nullable = false
+        name = "prev_result_id"
     )
     private TestResult prevResult;
 

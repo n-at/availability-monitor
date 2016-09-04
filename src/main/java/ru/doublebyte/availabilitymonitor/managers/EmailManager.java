@@ -125,6 +125,9 @@ public class EmailManager {
      * @return
      */
     private String getNotificationBody(Monitoring monitoring, TestResult currentTestResult, TestResult prevTestResult) {
+        String currentStatus = currentTestResult.getResult().toString();
+        String prevStatus = prevTestResult == null ? "NOT TESTED" : prevTestResult.getResult().toString();
+
         return String.format(
                 "%s (%s) availability status changed\n" +
                 "Date: %s\n" +
@@ -132,8 +135,7 @@ public class EmailManager {
                 "Previous status: %s\n",
                 monitoring.getName(), monitoring.getUrl(),
                 currentTestResult.getCreatedAtFormatted(),
-                currentTestResult.getResult().toString(),
-                prevTestResult.getResult().toString()
+                currentStatus, prevStatus
         );
     }
 
