@@ -42,4 +42,10 @@
     <p class="text-center">
         {{ pagination("status-history", monitoring, prev_page, next_page) }}
     </p>
+
+    <p class="text-center">
+        <a href="/status/{{ monitoring.id }}" class="btn btn-default">
+            <i class="glyphicon glyphicon-time"></i> Full status history
+        </a>
+    </p>
 {% endblock %}

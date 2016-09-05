@@ -1,5 +1,5 @@
 {% import "../status_history/result_style" %}
 
-<a class="monitoring-status" href="/status/{{ monitoring.id }}">
+<a class="monitoring-status" href="/status-history/{{ monitoring.id }}">
     {{ result_style(monitoring.latestTestResult.result) }}
 </a>
