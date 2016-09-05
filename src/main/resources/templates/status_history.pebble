@@ -20,8 +20,8 @@
         <table class="table table-condensed table-hover">
             <tr>
                 <th>Date</th>
-                <th>Old status</th>
                 <th>New status</th>
+                <th>Old status</th>
             </tr>
             {% for difference in differences %}
                 <tr>
@@ -29,10 +29,10 @@
                         {{ difference.result.createdAtFormatted }}
                     </td>
                     <td>
-                        {{ result_style(difference.prevResult.result) }}
+                        {{ result_style(difference.result.result) }}
                     </td>
                     <td>
-                        {{ result_style(difference.result.result) }}
+                        {{ result_style(difference.prevResult.result) }}
                     </td>
                 </tr>
             {% endfor %}
