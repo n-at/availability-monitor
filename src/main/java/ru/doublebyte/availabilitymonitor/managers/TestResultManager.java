@@ -10,6 +10,7 @@ import ru.doublebyte.availabilitymonitor.entities.TestResult;
 import ru.doublebyte.availabilitymonitor.entities.TestResultDifference;
 import ru.doublebyte.availabilitymonitor.testers.Result;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -108,6 +109,25 @@ public class TestResultManager {
         testResultDifferenceManager.add(testResultDifference);
 
         notificationManager.sendNotifications(monitoring, currentTestResult, latestTestResult);
+    }
+
+    /**
+     * Delete test results older than desired date
+     * @param date
+     * @return
+     */
+    public boolean deleteOlderThan(LocalDateTime date) {
+        logger.info("Removing test results older than {}", date);
+
+        try {
+            int count = testResultRepository.deleteOlder(date);
+            logger.info("Removed {} test results", count);
+        } catch (Exception e) {
+            logger.error("An error occurred while removing test results", e);
+            return false;
+        }
+
+        return true;
     }
 
 }

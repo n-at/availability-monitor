@@ -32,6 +32,8 @@ spring.mail:
 #monitor:
 #  #Number of threads for testing (already set up, change if needed)
 #  thread-pool-size: 5
+#  #Number of days to keep test results
+#  keep-test-results: 90
 
 #Loggin level settings, set for debug
 #logging.level:

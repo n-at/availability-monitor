@@ -30,6 +30,9 @@ public class MainConfiguration {
     @Value("${monitor.thread-pool-size}")
     private int threadPoolSize;
 
+    @Value("${monitor.keep-test-results}")
+    private int keepTestResults;
+
     @Value("${spring.mail.from}")
     private String notificationFromAddress;
 
@@ -89,6 +92,11 @@ public class MainConfiguration {
     @Bean
     public TesterFactory testerFactory() {
         return new UrlTesterFactory(testResultManager());
+    }
+
+    @Bean
+    public MaintenanceManager maintenanceManager() {
+        return new MaintenanceManager(taskScheduler(), testResultManager(), keepTestResults);
     }
 
 }

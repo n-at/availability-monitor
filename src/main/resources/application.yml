@@ -13,3 +13,4 @@ spring.datasource:
 #Default monitoring settings
 monitor:
   thread-pool-size: 5
+  keep-test-results: 90
