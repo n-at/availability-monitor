@@ -5,10 +5,6 @@
         </a>
     {% endif %}
 
-    <a href="/" class="btn btn-default">
-        <i class="glyphicon glyphicon-chevron-up"></i> Home
-    </a>
-
     {% if not next_page is null %}
         <a class="btn btn-default" href="/{{ page_name }}/{{ monitoring.id }}/{{ next_page }}">
             <i class="glyphicon glyphicon-chevron-right"></i> Next page
