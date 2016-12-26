@@ -6,13 +6,13 @@
 
     <groupId>ru.doublebyte</groupId>
     <artifactId>availability-monitor</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0</version>
     <packaging>jar</packaging>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>1.4.1.RELEASE</version>
+        <version>1.4.3.RELEASE</version>
     </parent>
 
     <dependencies>
@@ -39,14 +39,19 @@
             <version>${pebble.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.webjars.bower</groupId>
+            <groupId>org.webjars.npm</groupId>
             <artifactId>bootstrap</artifactId>
-            <version>3.3.7</version>
+            <version>${bootstrap.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.webjars.npm</groupId>
+            <artifactId>jquery</artifactId>
+            <version>${jquery.version}</version>
         </dependency>
         <dependency>
             <groupId>org.webjars.bower</groupId>
             <artifactId>geopattern</artifactId>
-            <version>1.2.3</version>
+            <version>${geopattern.version}</version>
         </dependency>
 
         <dependency>
@@ -70,7 +75,10 @@
 
     <properties>
         <java.version>1.8</java.version>
-        <pebble.version>2.2.2</pebble.version>
+        <pebble.version>2.3.0</pebble.version>
+        <bootstrap.version>3.3.7</bootstrap.version>
+        <jquery.version>3.1.0</jquery.version>
+        <geopattern.version>1.2.3</geopattern.version>
     </properties>
 
     <build>
