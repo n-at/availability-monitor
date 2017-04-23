@@ -50,6 +50,9 @@ public class MaintenanceManager implements InitializingBean {
     private Runnable getTestResultsCleaner() {
         logger.info("Removing test results older than {} days", keepTestResults);
         return () -> {
+            if (keepTestResults == 0) {
+                return;
+            }
             LocalDateTime deleteOlderDate = LocalDateTime.now().minus(keepTestResults, ChronoUnit.DAYS);
             testResultManager.deleteOlderThan(deleteOlderDate);
         };
