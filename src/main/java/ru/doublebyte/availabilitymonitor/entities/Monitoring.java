@@ -1,32 +1,13 @@
 package ru.doublebyte.availabilitymonitor.entities;
 
-import javax.persistence.*;
-
-@Entity
-@Table(name = "monitoring")
 public class Monitoring {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
     private Long id;
-
-    @Column(name = "url", nullable = false, length = 250)
     private String url;
-
-    @Column(name = "name", nullable = false, length = 250)
     private String name;
-
-    @Column(name = "active")
     private Boolean active;
-
-    @Column(name = "check_interval", nullable = false)
     private Integer checkInterval;
-
-    @Column(name = "respond_interval", nullable = false)
     private Integer respondInterval;
-
-    @Transient
     private TestResult latestTestResult;
 
     ///////////////////////////////////////////////////////////////////////////
@@ -51,6 +32,10 @@ public class Monitoring {
 
     public Long getId() {
         return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getUrl() {

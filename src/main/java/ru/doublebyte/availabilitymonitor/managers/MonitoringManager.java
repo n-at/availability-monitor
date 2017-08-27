@@ -3,8 +3,8 @@ package ru.doublebyte.availabilitymonitor.managers;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
-import ru.doublebyte.availabilitymonitor.repositories.MonitoringRepository;
 import ru.doublebyte.availabilitymonitor.entities.Monitoring;
+import ru.doublebyte.availabilitymonitor.storages.MonitoringStorage;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,16 +16,16 @@ public class MonitoringManager implements InitializingBean {
 
     private static final Logger logger = LoggerFactory.getLogger(MonitoringManager.class);
 
-    private MonitoringRepository monitoringRepository;
+    private MonitoringStorage monitoringStorage;
     private SchedulerManager schedulerManager;
 
     ///////////////////////////////////////////////////////////////////////////
 
     public MonitoringManager(
-            MonitoringRepository monitoringRepository,
+            MonitoringStorage monitoringStorage,
             SchedulerManager schedulerManager
     ) {
-        this.monitoringRepository = monitoringRepository;
+        this.monitoringStorage = monitoringStorage;
         this.schedulerManager = schedulerManager;
     }
 
@@ -36,7 +36,7 @@ public class MonitoringManager implements InitializingBean {
      * @return Monitoring list
      */
     public List<Monitoring> getAll() {
-        return monitoringRepository.findAllByOrderByName();
+        return monitoringStorage.getAll();
     }
 
     /**
@@ -47,7 +47,7 @@ public class MonitoringManager implements InitializingBean {
     public Monitoring get(Long id) {
         try {
             logger.debug("Finding monitoring with id {}", id);
-            return monitoringRepository.findOne(id);
+            return monitoringStorage.get(id);
         } catch (Exception e) {
             logger.error("An error occurred while getting monitoring with id " + id, e);
             return null;
@@ -61,7 +61,7 @@ public class MonitoringManager implements InitializingBean {
      */
     public boolean add(Monitoring monitoring) {
         try {
-            monitoring = monitoringRepository.save(monitoring);
+            monitoring = monitoringStorage.save(monitoring);
             logger.info("Added new monitoring with id {}", monitoring.getId());
         } catch (Exception e) {
             logger.error("An error occurred while adding new monitoring", e);
@@ -80,7 +80,7 @@ public class MonitoringManager implements InitializingBean {
      */
     public boolean update(Monitoring monitoring) {
         try {
-            monitoringRepository.save(monitoring);
+            monitoringStorage.save(monitoring);
             logger.info("Monitoring with id {} updated", monitoring.getId());
         } catch (Exception e) {
             logger.error("An error occurred while updating monitoring with id {}" + monitoring.getId(), e);
@@ -103,7 +103,7 @@ public class MonitoringManager implements InitializingBean {
         }
 
         try {
-            monitoringRepository.delete(monitoring);
+            monitoringStorage.delete(monitoring);
             logger.info("Monitoring with id {} removed", monitoring.getId());
         } catch (Exception e) {
             logger.error("An error occurred while deleting monitoring", e);

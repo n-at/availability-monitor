@@ -11,16 +11,15 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 import ru.doublebyte.availabilitymonitor.factories.TesterFactory;
 import ru.doublebyte.availabilitymonitor.factories.UrlTesterFactory;
 import ru.doublebyte.availabilitymonitor.managers.*;
-import ru.doublebyte.availabilitymonitor.repositories.MonitoringRepository;
 import ru.doublebyte.availabilitymonitor.repositories.TestResultDifferenceRepository;
 import ru.doublebyte.availabilitymonitor.repositories.TestResultRepository;
 import ru.doublebyte.availabilitymonitor.storages.EmailStorage;
+import ru.doublebyte.availabilitymonitor.storages.MonitoringStorage;
 
 @Configuration
 @EnableAsync
 public class MainConfiguration {
 
-    private final MonitoringRepository monitoringRepository;
     private final TestResultRepository testResultRepository;
     private final TestResultDifferenceRepository testResultDifferenceRepository;
 
@@ -38,12 +37,10 @@ public class MainConfiguration {
     @Autowired
     public MainConfiguration(
             JavaMailSender javaMailSender,
-            MonitoringRepository monitoringRepository,
             TestResultRepository testResultRepository,
             TestResultDifferenceRepository testResultDifferenceRepository
     ) {
         this.javaMailSender = javaMailSender;
-        this.monitoringRepository = monitoringRepository;
         this.testResultRepository = testResultRepository;
         this.testResultDifferenceRepository = testResultDifferenceRepository;
     }
@@ -61,8 +58,13 @@ public class MainConfiguration {
     }
 
     @Bean
+    public MonitoringStorage monitoringStorage() {
+        return new MonitoringStorage();
+    }
+
+    @Bean
     public MonitoringManager monitoringManager() {
-        return new MonitoringManager(monitoringRepository, schedulerManager());
+        return new MonitoringManager(monitoringStorage(), schedulerManager());
     }
 
     @Bean

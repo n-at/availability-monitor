@@ -28,7 +28,7 @@ public class EmailManager {
      */
     public List<Email> getAll() {
         try {
-            return emailStorage.get();
+            return emailStorage.getAll();
         } catch (Exception e) {
             logger.error("An error occurred while getting all emails", e);
             return new ArrayList<>();

@@ -2,8 +2,8 @@ package ru.doublebyte.availabilitymonitor.managers;
 
 import org.junit.Before;
 import org.junit.Test;
-import ru.doublebyte.availabilitymonitor.repositories.MonitoringRepository;
 import ru.doublebyte.availabilitymonitor.entities.Monitoring;
+import ru.doublebyte.availabilitymonitor.storages.MonitoringStorage;
 
 import java.util.List;
 
@@ -16,7 +16,7 @@ public class MonitoringManagerTest {
 
     @Before
     public void setUp() {
-        monitoringManager = new MonitoringManager(monitoringRepository(), schedulerManager());
+        monitoringManager = new MonitoringManager(monitoringStorage(), schedulerManager());
     }
 
     @Test
@@ -61,15 +61,11 @@ public class MonitoringManagerTest {
     ///////////////////////////////////////////////////////////////////////////
 
     private SchedulerManager schedulerManager() {
-        SchedulerManager schedulerManager = mock(SchedulerManager.class);
-
-        return schedulerManager;
+        return mock(SchedulerManager.class);
     }
 
-    private MonitoringRepository monitoringRepository() {
-        MonitoringRepository monitoringRepository = mock(MonitoringRepository.class);
-
-        return monitoringRepository;
+    private MonitoringStorage monitoringStorage() {
+        return mock(MonitoringStorage.class);
     }
 
 }
