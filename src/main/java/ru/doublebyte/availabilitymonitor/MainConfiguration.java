@@ -11,10 +11,10 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 import ru.doublebyte.availabilitymonitor.factories.TesterFactory;
 import ru.doublebyte.availabilitymonitor.factories.UrlTesterFactory;
 import ru.doublebyte.availabilitymonitor.managers.*;
-import ru.doublebyte.availabilitymonitor.repositories.EmailRepository;
 import ru.doublebyte.availabilitymonitor.repositories.MonitoringRepository;
 import ru.doublebyte.availabilitymonitor.repositories.TestResultDifferenceRepository;
 import ru.doublebyte.availabilitymonitor.repositories.TestResultRepository;
+import ru.doublebyte.availabilitymonitor.storages.EmailStorage;
 
 @Configuration
 @EnableAsync
@@ -23,7 +23,6 @@ public class MainConfiguration {
     private final MonitoringRepository monitoringRepository;
     private final TestResultRepository testResultRepository;
     private final TestResultDifferenceRepository testResultDifferenceRepository;
-    private final EmailRepository emailRepository;
 
     private final JavaMailSender javaMailSender;
 
@@ -41,14 +40,12 @@ public class MainConfiguration {
             JavaMailSender javaMailSender,
             MonitoringRepository monitoringRepository,
             TestResultRepository testResultRepository,
-            TestResultDifferenceRepository testResultDifferenceRepository,
-            EmailRepository emailRepository
+            TestResultDifferenceRepository testResultDifferenceRepository
     ) {
         this.javaMailSender = javaMailSender;
         this.monitoringRepository = monitoringRepository;
         this.testResultRepository = testResultRepository;
         this.testResultDifferenceRepository = testResultDifferenceRepository;
-        this.emailRepository = emailRepository;
     }
 
     @Bean
@@ -56,6 +53,11 @@ public class MainConfiguration {
         ThreadPoolTaskScheduler threadPoolTaskScheduler = new ThreadPoolTaskScheduler();
         threadPoolTaskScheduler.setPoolSize(threadPoolSize);
         return threadPoolTaskScheduler;
+    }
+
+    @Bean
+    public EmailStorage emailStorage() {
+        return new EmailStorage();
     }
 
     @Bean
@@ -81,7 +83,7 @@ public class MainConfiguration {
 
     @Bean
     public EmailManager emailManager() {
-        return new EmailManager(emailRepository);
+        return new EmailManager(emailStorage());
     }
 
     @Bean

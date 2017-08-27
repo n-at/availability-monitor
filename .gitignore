@@ -4,3 +4,4 @@
 *.db
 target/
 /application.yml
+/*.json

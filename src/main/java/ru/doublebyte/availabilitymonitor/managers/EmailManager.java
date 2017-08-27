@@ -3,7 +3,7 @@ package ru.doublebyte.availabilitymonitor.managers;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.doublebyte.availabilitymonitor.entities.Email;
-import ru.doublebyte.availabilitymonitor.repositories.EmailRepository;
+import ru.doublebyte.availabilitymonitor.storages.EmailStorage;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,12 +12,12 @@ public class EmailManager {
 
     private static final Logger logger = LoggerFactory.getLogger(EmailManager.class);
 
-    private EmailRepository emailRepository;
+    private EmailStorage emailStorage;
 
     ///////////////////////////////////////////////////////////////////////////
 
-    public EmailManager(EmailRepository emailRepository) {
-        this.emailRepository = emailRepository;
+    public EmailManager(EmailStorage emailStorage) {
+        this.emailStorage = emailStorage;
     }
 
     ///////////////////////////////////////////////////////////////////////////
@@ -28,7 +28,7 @@ public class EmailManager {
      */
     public List<Email> getAll() {
         try {
-            return emailRepository.findAllByOrderByAddress();
+            return emailStorage.get();
         } catch (Exception e) {
             logger.error("An error occurred while getting all emails", e);
             return new ArrayList<>();
@@ -47,7 +47,7 @@ public class EmailManager {
         }
 
         try {
-            email = emailRepository.save(email);
+            email = emailStorage.save(email);
             logger.info("Saved new email with id {}", email.getId());
         } catch (Exception e) {
             logger.error("An error occurred while saving new email", e);
@@ -64,7 +64,7 @@ public class EmailManager {
      */
     public boolean delete(Long id) {
         try {
-            emailRepository.delete(id);
+            emailStorage.delete(id);
             logger.info("Email with id {} deleted", id);
         } catch (Exception e) {
             logger.error("An error occurred while removing email with id " + id, e);
