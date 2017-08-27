@@ -21,13 +21,6 @@ spring.mail:
 #  address: 0.0.0.0
 #  port: 8080
 
-#Database connection
-#spring.datasource:
-#    driver-class-name: org.h2.Driver
-#    url: jdbc:h2:./database
-#    username: sa
-#    password:
-
 #Monitoring settings
 #monitor:
 #  #Number of threads for testing (already set up, change if needed)

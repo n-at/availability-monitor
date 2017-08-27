@@ -1,5 +1,6 @@
-{% import "../status_history/result_style" %}
+{% import "./result_style" %}
 
-<a class="monitoring-status" href="/status/{{ monitoring.id }}">
+<span class="monitoring-status">
     {{ result_style(monitoring.latestTestResult.result) }}
-</a>
+    ({{ monitoring.latestTestResult.createdAtFormatted }})
+</span>

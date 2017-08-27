@@ -12,15 +12,12 @@ import ru.doublebyte.availabilitymonitor.managers.TestResultManager;
 import ru.doublebyte.availabilitymonitor.entities.Monitoring;
 import ru.doublebyte.availabilitymonitor.entities.TestResult;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/")
 public class IndexController {
-
-    private static final int STATUS_PAGE_SIZE = 20;
 
     private final MonitoringManager monitoringManager;
     private final TestResultManager testResultManager;
@@ -185,46 +182,6 @@ public class IndexController {
 
     ///////////////////////////////////////////////////////////////////////////
 
-    @RequestMapping(value = "/status/{id}/{page}", method = RequestMethod.GET)
-    public String status(
-            @PathVariable("id") Long id,
-            @PathVariable("page") int page,
-            Model model,
-            RedirectAttributes redirectAttributes
-    ) {
-        Monitoring monitoring = monitoringManager.get(id);
-        if (monitoring == null) {
-            redirectAttributes.addFlashAttribute("error_message",
-                    String.format("Monitoring with id %d not found", id));
-            return "redirect:/";
-        }
-
-        if (page <= 0) {
-            page = 1;
-        }
-
-        List<TestResult> testResults =
-                Collections.singletonList(testResultManager.getById(id));
-
-        model.addAttribute("monitoring", monitoring);
-        model.addAttribute("test_results", testResults);
-
-        addPagesModelVariables(model, page, testResults.size() != STATUS_PAGE_SIZE);
-
-        return "status";
-    }
-
-    @RequestMapping(value = "/status/{id}", method = RequestMethod.GET)
-    public String status(
-            @PathVariable("id") Long id,
-            Model model,
-            RedirectAttributes redirectAttributes
-    ) {
-        return status(id, 1, model, redirectAttributes);
-    }
-
-    ///////////////////////////////////////////////////////////////////////////
-
     @RequestMapping(value = "/email", method = RequestMethod.GET)
     public String emailForm(Model model) {
         model.addAttribute("emails", emailManager.getAll());
@@ -265,23 +222,4 @@ public class IndexController {
         return "redirect:/email";
     }
 
-    ///////////////////////////////////////////////////////////////////////////
-
-    /**
-     * Add to model attributes with page numbers
-     * @param model
-     * @param currentPage
-     * @param isLast
-     */
-    private void addPagesModelVariables(Model model, int currentPage, boolean isLast) {
-        model.addAttribute("current_page", currentPage);
-
-        if (currentPage > 1) {
-            model.addAttribute("prev_page", currentPage - 1);
-        }
-
-        if (!isLast) {
-            model.addAttribute("next_page", currentPage + 1);
-        }
-    }
 }
