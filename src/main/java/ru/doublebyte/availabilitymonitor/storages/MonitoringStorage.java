@@ -5,10 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.doublebyte.availabilitymonitor.entities.Monitoring;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class MonitoringStorage extends AbstractStorage<Monitoring> {
@@ -31,7 +28,9 @@ public class MonitoringStorage extends AbstractStorage<Monitoring> {
 
     @Override
     public List<Monitoring> getAll() {
-        return new ArrayList<>(monitorings.values());
+        List<Monitoring> monitoringList = new ArrayList<>(monitorings.values());
+        monitoringList.sort(Comparator.comparing(Monitoring::getName));
+        return monitoringList;
     }
 
     @Override

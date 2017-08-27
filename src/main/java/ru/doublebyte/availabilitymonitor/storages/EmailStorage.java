@@ -36,7 +36,9 @@ public class EmailStorage extends AbstractStorage<Email> {
 
     @Override
     public List<Email> getAll() {
-        return new ArrayList<>(emails.values());
+        List<Email> emailList = new ArrayList<>(emails.values());
+        emailList.sort(Comparator.comparing(Email::getAddress));
+        return emailList;
     }
 
     @Override
