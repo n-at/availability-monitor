@@ -98,9 +98,4 @@ public class MainConfiguration {
         return new UrlTesterFactory(testResultManager());
     }
 
-    @Bean
-    public MaintenanceManager maintenanceManager() {
-        return new MaintenanceManager(taskScheduler(), testResultManager(), keepTestResults);
-    }
-
 }
