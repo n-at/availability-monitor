@@ -1,29 +1,17 @@
 package ru.doublebyte.availabilitymonitor.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import ru.doublebyte.availabilitymonitor.testers.Result;
 
-import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-@Entity
-@Table(name = "test_result")
 public class TestResult {
 
     private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm:ss");
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
     private Long id;
-
-    @Column(name = "monitoring_id", nullable = false)
-    private Long monitoringId;
-
-    @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
-
-    @Column(name = "result", nullable = false)
     private Result result;
 
     ///////////////////////////////////////////////////////////////////////////
@@ -37,15 +25,14 @@ public class TestResult {
     }
 
     public TestResult(Long monitoringId, LocalDateTime createdAt, Result result) {
-        this.monitoringId = monitoringId;
         this.createdAt = createdAt;
         this.result = result;
     }
 
     @Override
     public String toString() {
-        return String.format("TestResult{id=%d, monitoringId=%d, createdAt=%s, result=%s}",
-                id, monitoringId, createdAt, result);
+        return String.format("TestResult{id=%d, createdAt=%s, result=%s}",
+                id, createdAt, result);
     }
 
     ///////////////////////////////////////////////////////////////////////////
@@ -54,12 +41,8 @@ public class TestResult {
         return id;
     }
 
-    public Long getMonitoringId() {
-        return monitoringId;
-    }
-
-    public void setMonitoringId(Long monitoringId) {
-        this.monitoringId = monitoringId;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public LocalDateTime getCreatedAt() {
@@ -78,7 +61,7 @@ public class TestResult {
         this.result = result;
     }
 
-    @Transient
+    @JsonIgnore
     public String getCreatedAtFormatted() {
         return createdAt.format(FORMATTER);
     }

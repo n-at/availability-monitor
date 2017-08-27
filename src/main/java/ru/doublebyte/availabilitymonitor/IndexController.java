@@ -8,12 +8,11 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import ru.doublebyte.availabilitymonitor.entities.Email;
 import ru.doublebyte.availabilitymonitor.managers.EmailManager;
 import ru.doublebyte.availabilitymonitor.managers.MonitoringManager;
-import ru.doublebyte.availabilitymonitor.managers.TestResultDifferenceManager;
 import ru.doublebyte.availabilitymonitor.managers.TestResultManager;
 import ru.doublebyte.availabilitymonitor.entities.Monitoring;
 import ru.doublebyte.availabilitymonitor.entities.TestResult;
-import ru.doublebyte.availabilitymonitor.entities.TestResultDifference;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -25,7 +24,6 @@ public class IndexController {
 
     private final MonitoringManager monitoringManager;
     private final TestResultManager testResultManager;
-    private final TestResultDifferenceManager testResultDifferenceManager;
     private final EmailManager emailManager;
 
     ///////////////////////////////////////////////////////////////////////////
@@ -34,12 +32,10 @@ public class IndexController {
     public IndexController(
             MonitoringManager monitoringManager,
             TestResultManager testResultManager,
-            TestResultDifferenceManager testResultDifferenceManager,
             EmailManager emailManager
     ) {
         this.monitoringManager = monitoringManager;
         this.testResultManager = testResultManager;
-        this.testResultDifferenceManager = testResultDifferenceManager;
         this.emailManager = emailManager;
     }
 
@@ -49,10 +45,9 @@ public class IndexController {
     public String index(Model model) {
         List<Monitoring> monitorings = monitoringManager.getAll()
                 .stream()
-                .map(it -> {
-                    TestResult testResult = testResultManager.getLatestForMonitoring(it.getId());
+                .peek(it -> {
+                    TestResult testResult = testResultManager.getById(it.getId());
                     it.setLatestTestResult(testResult);
-                    return it;
                 })
                 .collect(Collectors.toList());
 
@@ -209,7 +204,7 @@ public class IndexController {
         }
 
         List<TestResult> testResults =
-                testResultManager.getForMonitoringByPage(id, page - 1 , STATUS_PAGE_SIZE);
+                Collections.singletonList(testResultManager.getById(id));
 
         model.addAttribute("monitoring", monitoring);
         model.addAttribute("test_results", testResults);
@@ -226,46 +221,6 @@ public class IndexController {
             RedirectAttributes redirectAttributes
     ) {
         return status(id, 1, model, redirectAttributes);
-    }
-
-    ///////////////////////////////////////////////////////////////////////////
-
-    @RequestMapping(value = "/status-history/{id}/{page}")
-    public String statusHistory(
-            @PathVariable("id") Long id,
-            @PathVariable("page") int page,
-            Model model,
-            RedirectAttributes redirectAttributes
-    ) {
-        Monitoring monitoring = monitoringManager.get(id);
-        if (monitoring == null) {
-            redirectAttributes.addFlashAttribute("error_message",
-                    String.format("Monitoring with id %d not found", id));
-            return "redirect:/";
-        }
-
-        if (page <= 0) {
-            page = 1;
-        }
-
-        List<TestResultDifference> differences =
-                testResultDifferenceManager.getForMonitoringByPage(id, page - 1, STATUS_PAGE_SIZE);
-
-        model.addAttribute("monitoring", monitoring);
-        model.addAttribute("differences", differences);
-
-        addPagesModelVariables(model, page, differences.size() != STATUS_PAGE_SIZE);
-
-        return "status_history";
-    }
-
-    @RequestMapping(value = "/status-history/{id}")
-    public String statusHistory(
-            @PathVariable("id") Long id,
-            Model model,
-            RedirectAttributes redirectAttributes
-    ) {
-        return statusHistory(id, 1, model, redirectAttributes);
     }
 
     ///////////////////////////////////////////////////////////////////////////

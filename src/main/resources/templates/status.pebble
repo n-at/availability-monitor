@@ -35,13 +35,4 @@
         </table>
     {% endif %}
 
-    <p class="text-center">
-        {{ pagination("status", monitoring, prev_page, next_page) }}
-    </p>
-
-    <p class="text-center">
-        <a href="/status-history/{{ monitoring.id }}" class="btn btn-default">
-            <i class="glyphicon glyphicon-time"></i> Status change history
-        </a>
-    </p>
 {% endblock %}

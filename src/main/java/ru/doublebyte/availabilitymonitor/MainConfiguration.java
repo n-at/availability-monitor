@@ -11,17 +11,13 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 import ru.doublebyte.availabilitymonitor.factories.TesterFactory;
 import ru.doublebyte.availabilitymonitor.factories.UrlTesterFactory;
 import ru.doublebyte.availabilitymonitor.managers.*;
-import ru.doublebyte.availabilitymonitor.repositories.TestResultDifferenceRepository;
-import ru.doublebyte.availabilitymonitor.repositories.TestResultRepository;
 import ru.doublebyte.availabilitymonitor.storages.EmailStorage;
 import ru.doublebyte.availabilitymonitor.storages.MonitoringStorage;
+import ru.doublebyte.availabilitymonitor.storages.TestResultStorage;
 
 @Configuration
 @EnableAsync
 public class MainConfiguration {
-
-    private final TestResultRepository testResultRepository;
-    private final TestResultDifferenceRepository testResultDifferenceRepository;
 
     private final JavaMailSender javaMailSender;
 
@@ -35,14 +31,8 @@ public class MainConfiguration {
     private String notificationFromAddress;
 
     @Autowired
-    public MainConfiguration(
-            JavaMailSender javaMailSender,
-            TestResultRepository testResultRepository,
-            TestResultDifferenceRepository testResultDifferenceRepository
-    ) {
+    public MainConfiguration(JavaMailSender javaMailSender) {
         this.javaMailSender = javaMailSender;
-        this.testResultRepository = testResultRepository;
-        this.testResultDifferenceRepository = testResultDifferenceRepository;
     }
 
     @Bean
@@ -63,19 +53,18 @@ public class MainConfiguration {
     }
 
     @Bean
+    public TestResultStorage testResultStorage() {
+        return new TestResultStorage();
+    }
+
+    @Bean
     public MonitoringManager monitoringManager() {
         return new MonitoringManager(monitoringStorage(), schedulerManager());
     }
 
     @Bean
-    public TestResultDifferenceManager testResultDifferenceManager() {
-        return new TestResultDifferenceManager(testResultDifferenceRepository);
-    }
-
-    @Bean
     public TestResultManager testResultManager() {
-        return new TestResultManager(testResultRepository, testResultDifferenceManager(),
-                notificationManager());
+        return new TestResultManager(testResultStorage(), notificationManager());
     }
 
     @Bean

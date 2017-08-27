@@ -8,7 +8,7 @@ import ru.doublebyte.availabilitymonitor.entities.Email;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class EmailStorage extends AbstractStorage {
+public class EmailStorage extends AbstractStorage<Email> {
 
     private static final Logger logger = LoggerFactory.getLogger(EmailStorage.class);
     private static final Random RANDOM = new Random();
@@ -26,6 +26,7 @@ public class EmailStorage extends AbstractStorage {
 
     ///////////////////////////////////////////////////////////////////////////
 
+    @Override
     public Email get(Long id) {
         if (!emails.containsKey(id)) {
             throw new IllegalArgumentException(String.format("Email with id %d not found", id));
@@ -33,10 +34,12 @@ public class EmailStorage extends AbstractStorage {
         return emails.get(id);
     }
 
+    @Override
     public List<Email> getAll() {
         return new ArrayList<>(emails.values());
     }
 
+    @Override
     public Email save(Email email) {
         Long id = RANDOM.nextLong();
 
@@ -52,6 +55,7 @@ public class EmailStorage extends AbstractStorage {
         return email;
     }
 
+    @Override
     public void delete(Long id) {
         if (!emails.containsKey(id)) {
             throw new IllegalArgumentException(String.format("Email with id %d not found", id));
@@ -61,6 +65,7 @@ public class EmailStorage extends AbstractStorage {
         save(emails);
     }
 
+    @Override
     public void delete(Email email) {
         delete(email.getId());
     }

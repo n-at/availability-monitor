@@ -1,5 +1,7 @@
 package ru.doublebyte.availabilitymonitor.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 public class Monitoring {
 
     private Long id;
@@ -8,6 +10,8 @@ public class Monitoring {
     private Boolean active;
     private Integer checkInterval;
     private Integer respondInterval;
+
+    @JsonIgnore
     private TestResult latestTestResult;
 
     ///////////////////////////////////////////////////////////////////////////

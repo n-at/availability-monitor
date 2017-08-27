@@ -11,11 +11,10 @@ import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class MonitoringStorage extends AbstractStorage {
+public class MonitoringStorage extends AbstractStorage<Monitoring> {
 
     private static final Logger logger = LoggerFactory.getLogger(MonitoringStorage.class);
     private static final Random RANDOM = new Random();
-    private static final String STORAGE_FILE_NAME = "monitoring.json";
 
     private Map<Long, Monitoring> monitorings = new ConcurrentHashMap<>();
 
@@ -30,10 +29,12 @@ public class MonitoringStorage extends AbstractStorage {
 
     ///////////////////////////////////////////////////////////////////////////
 
+    @Override
     public List<Monitoring> getAll() {
         return new ArrayList<>(monitorings.values());
     }
 
+    @Override
     public Monitoring get(Long id) {
         if (!monitorings.containsKey(id)) {
             throw new IllegalArgumentException(String.format("Monitoring with ud %d not found", id));
@@ -41,6 +42,7 @@ public class MonitoringStorage extends AbstractStorage {
         return monitorings.get(id);
     }
 
+    @Override
     public Monitoring save(Monitoring monitoring) {
         Long id = RANDOM.nextLong();
 
@@ -56,6 +58,7 @@ public class MonitoringStorage extends AbstractStorage {
         return monitoring;
     }
 
+    @Override
     public void delete(Long id) {
         if (!monitorings.containsKey(id)) {
             throw new IllegalArgumentException(String.format("Monitoring with ud %d not found", id));
@@ -65,6 +68,7 @@ public class MonitoringStorage extends AbstractStorage {
         save(monitorings);
     }
 
+    @Override
     public void delete(Monitoring monitoring) {
         delete(monitoring.getId());
     }

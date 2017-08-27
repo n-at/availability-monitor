@@ -2,67 +2,43 @@ package ru.doublebyte.availabilitymonitor.managers;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import ru.doublebyte.availabilitymonitor.entities.Monitoring;
-import ru.doublebyte.availabilitymonitor.repositories.TestResultRepository;
 import ru.doublebyte.availabilitymonitor.entities.TestResult;
-import ru.doublebyte.availabilitymonitor.entities.TestResultDifference;
+import ru.doublebyte.availabilitymonitor.storages.TestResultStorage;
 import ru.doublebyte.availabilitymonitor.testers.Result;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 public class TestResultManager {
 
     private static final Logger logger = LoggerFactory.getLogger(TestResultManager.class);
 
-    private TestResultRepository testResultRepository;
-    private TestResultDifferenceManager testResultDifferenceManager;
+    private TestResultStorage testResultStorage;
     private NotificationManager notificationManager;
 
     ///////////////////////////////////////////////////////////////////////////
 
     public TestResultManager(
-            TestResultRepository testResultRepository,
-            TestResultDifferenceManager testResultDifferenceManager,
+            TestResultStorage testResultStorage,
             NotificationManager notificationManager
     ) {
-        this.testResultRepository = testResultRepository;
-        this.testResultDifferenceManager = testResultDifferenceManager;
+        this.testResultStorage = testResultStorage;
         this.notificationManager = notificationManager;
     }
 
     ///////////////////////////////////////////////////////////////////////////
 
     /**
-     * Get latest test result for monitoring with given id
-     * @param monitoringId
+     * Get test result by monitoring id
+     * @param id
      * @return
      */
-    public TestResult getLatestForMonitoring(Long monitoringId) {
+    public TestResult getById(Long id) {
         try {
-            return testResultRepository.findFirstByMonitoringIdOrderByCreatedAtDesc(monitoringId);
+            return testResultStorage.get(id);
         } catch (Exception e) {
-            logger.error("An error occurred while finding latest result for monitoring with id " + monitoringId, e);
+            logger.error("An error occurred while getting test result by id " + id, e);
             return null;
-        }
-    }
-
-    /**
-     * Get test results for monitoring with given id
-     * @param monitoringId
-     * @param page
-     * @return
-     */
-    public List<TestResult> getForMonitoringByPage(Long monitoringId, int page, int resultsOnPage) {
-        Pageable pageable = new PageRequest(page, resultsOnPage);
-        try {
-            return testResultRepository.findByMonitoringIdOrderByCreatedAtDesc(monitoringId, pageable);
-        } catch (Exception e) {
-            logger.error("An error occurred while requesting test results for monitoring with id " + monitoringId);
-            return new ArrayList<>();
         }
     }
 
@@ -73,15 +49,25 @@ public class TestResultManager {
      * @return
      */
     public boolean add(Monitoring monitoring, TestResult testResult) {
-        TestResult latestTestResult = getLatestForMonitoring(testResult.getMonitoringId());
+        TestResult latestTestResult;
+        try {
+            latestTestResult = testResultStorage.get(monitoring.getId());
+        } catch (Exception e) {
+            logger.error("An error occurred while finding latest result for monitoring with id " + monitoring.getId(), e);
+
+            latestTestResult = new TestResult();
+            latestTestResult.setId(monitoring.getId());
+            latestTestResult.setCreatedAt(LocalDateTime.MIN);
+            latestTestResult.setResult(Result.NO_CONNECTION);
+        }
 
         try {
-            testResult = testResultRepository.save(testResult);
-            logger.debug("Saved test result with id {} for monitoring {}",
-                    testResult.getId(), testResult.getMonitoringId());
+            testResult.setId(monitoring.getId());
+            testResult = testResultStorage.save(testResult);
+            logger.debug("Saved test result for monitoring {}", testResult.getId());
         } catch (Exception e) {
             logger.error("An error occurred while saving test result for monitoring with id {}",
-                    testResult.getMonitoringId());
+                    monitoring.getId());
             return false;
         }
 
@@ -104,30 +90,7 @@ public class TestResultManager {
             return;
         }
 
-        TestResultDifference testResultDifference =
-                new TestResultDifference(currentTestResult, latestTestResult);
-        testResultDifferenceManager.add(testResultDifference);
-
         notificationManager.sendNotifications(monitoring, currentTestResult, latestTestResult);
-    }
-
-    /**
-     * Delete test results older than desired date
-     * @param date
-     * @return
-     */
-    public boolean deleteOlderThan(LocalDateTime date) {
-        logger.info("Removing test results older than {}", date);
-
-        try {
-            int count = testResultRepository.deleteOlder(date);
-            logger.info("Removed {} test results", count);
-        } catch (Exception e) {
-            logger.error("An error occurred while removing test results", e);
-            return false;
-        }
-
-        return true;
     }
 
 }
