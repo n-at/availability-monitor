@@ -24,14 +24,7 @@ import static org.junit.Assert.*;
         "logging.level.ru.doublebyte.availabilitymonitor=DEBUG"
     }
 )
-@SpringBootApplication(
-    exclude = {
-        FlywayAutoConfiguration.class,
-        JdbcTemplateAutoConfiguration.class,
-        HibernateJpaAutoConfiguration.class,
-        JpaRepositoriesAutoConfiguration.class,
-    }
-)
+@SpringBootApplication
 public class UrlCheckerTest {
 
     private static final int CHECK_TIMEOUT = 2000;
