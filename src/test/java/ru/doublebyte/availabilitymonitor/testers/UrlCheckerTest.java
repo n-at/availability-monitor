@@ -34,8 +34,8 @@ import static org.junit.Assert.*;
 )
 public class UrlCheckerTest {
 
-    private static final int CHECK_TIMEOUT = 500;
-    private static final int BAD_TIMEOUT = 1000;
+    private static final int CHECK_TIMEOUT = 2000;
+    private static final int BAD_TIMEOUT = 2100;
 
     @LocalServerPort
     private int serverPort;
