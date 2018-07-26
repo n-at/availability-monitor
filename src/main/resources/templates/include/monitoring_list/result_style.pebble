@@ -1,5 +1,5 @@
 {% macro result_style(result) %}
-    {% if not result is null %}
+    {% if result is not null %}
         {% if result.success %}
             <span class="text-success">{{ result }}</span>
         {% else %}

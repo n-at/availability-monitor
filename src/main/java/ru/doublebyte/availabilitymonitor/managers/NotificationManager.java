@@ -44,7 +44,7 @@ public class NotificationManager {
 
         SimpleMailMessage message = new SimpleMailMessage();
         message.setFrom(notificationFrom);
-        message.setSubject(getNotificationSubject(monitoring));
+        message.setSubject(getNotificationSubject(monitoring, currentTestResult));
         message.setText(getNotificationBody(monitoring, currentTestResult, prevTestResult));
 
         emailManager.getAll().forEach(it -> {
@@ -59,8 +59,9 @@ public class NotificationManager {
      * @param monitoring
      * @return
      */
-    private String getNotificationSubject(Monitoring monitoring) {
-        return String.format("%s: availability status changed", monitoring.getName());
+    private String getNotificationSubject(Monitoring monitoring, TestResult currentTestResult) {
+        return String.format("%s: availability status changed, now %s",
+                monitoring.getName(), currentTestResult.getResult().toString());
     }
 
     /**
